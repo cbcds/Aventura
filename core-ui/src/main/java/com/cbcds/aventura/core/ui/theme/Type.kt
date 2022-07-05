@@ -1,4 +1,4 @@
-package com.cbcds.aventura.ui.theme
+package com.cbcds.aventura.core.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.cbcds.aventura.R
+import com.cbcds.aventura.core.ui.R
 
 val Inter = FontFamily(
     Font(R.font.inter_regular, weight = FontWeight.Normal),
