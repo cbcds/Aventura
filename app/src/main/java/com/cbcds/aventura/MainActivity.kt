@@ -3,19 +3,16 @@ package com.cbcds.aventura
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import com.cbcds.aventura.core.ui.theme.AppTheme
+import androidx.core.view.WindowCompat
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
-            AppScreen()
+            AventuraApp()
         }
     }
-}
-
-@Composable
-fun AppScreen() {
-    AppTheme {}
 }
