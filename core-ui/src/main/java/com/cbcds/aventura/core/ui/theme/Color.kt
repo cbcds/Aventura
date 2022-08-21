@@ -1,4 +1,4 @@
-package com.cbcds.aventura.ui.theme
+package com.cbcds.aventura.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
