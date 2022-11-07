@@ -4,14 +4,19 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -102,6 +107,31 @@ fun IconButton(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TextButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    shape: Shape = ButtonDefaults.TextButtonShape,
+    colors: ButtonColors = ButtonDefaults.textButtonColors(),
+    contentPadding: PaddingValues = ButtonDefaults.TextPaddingValues,
+    content: @Composable RowScope.() -> Unit
+) {
+    CompositionLocalProvider(LocalMinimumTouchTargetEnforcement provides false) {
+        androidx.compose.material3.TextButton(
+            onClick = onClick,
+            modifier = modifier.defaultMinSize(1.dp, 1.dp),
+            enabled = enabled,
+            shape = shape,
+            colors = colors,
+            contentPadding = contentPadding,
+            content = content
+        )
+    }
+}
+
+
 // TODO: uncomment when this component is fully supported
 /*@Composable
 fun FilledIconButton(
@@ -179,6 +209,8 @@ object ButtonDefaults {
     val PaddingValues =
         PaddingValues(horizontal = ButtonHorizontalPadding, vertical = ButtonVerticalPadding)
     val IconPaddingValues = PaddingValues(IconButtonPadding)
+    val TextPaddingValues =
+        PaddingValues(horizontal = 0.dp, vertical = 0.dp)
 
     private const val DisabledButtonContainerAlpha = 0.35f
 
@@ -186,6 +218,8 @@ object ButtonDefaults {
     private fun disabledFilledButtonContentAlpha() = if (isSystemInDarkTheme()) 0.9f else 0.5f
 
     val ButtonShape = RoundedCornerShape(14.dp)
+
+    val TextButtonShape = RectangleShape
 
     @Composable
     fun outlinedButtonBorder(
@@ -226,6 +260,21 @@ object ButtonDefaults {
 
     @Composable
     fun iconButtonColors(
+        containerColor: Color = Color.Transparent,
+        contentColor: Color = MaterialTheme.colorScheme.onBackground,
+        disabledContainerColor: Color = Color.Transparent,
+        disabledContentColor: Color = MaterialTheme.colorScheme.primary.copy(
+            alpha = DisabledButtonContainerAlpha
+        )
+    ) = androidx.compose.material3.ButtonDefaults.buttonColors(
+        containerColor = containerColor,
+        contentColor = contentColor,
+        disabledContainerColor = disabledContainerColor,
+        disabledContentColor = disabledContentColor
+    )
+
+    @Composable
+    fun textButtonColors(
         containerColor: Color = Color.Transparent,
         contentColor: Color = MaterialTheme.colorScheme.onBackground,
         disabledContainerColor: Color = Color.Transparent,

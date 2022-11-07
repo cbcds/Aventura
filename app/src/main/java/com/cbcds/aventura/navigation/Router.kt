@@ -11,7 +11,7 @@ import com.cbcds.aventura.core.navigation.Screen
 class Router(val navController: NavHostController) {
 
     fun navigate(screen: Screen) {
-        navController.navigate(screen.name)
+        navController.navigate(screen.route)
     }
 
     fun onBackClick() {
