@@ -1,4 +1,4 @@
-package com.cbcds.aventura
+package com.cbcds.aventura.ui
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -14,10 +14,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.cbcds.aventura.core.navigation.EmptyScreen
 import com.cbcds.aventura.core.ui.component.Background
 import com.cbcds.aventura.core.ui.theme.AventuraAppTheme
 import com.cbcds.aventura.navigation.NavHost
+import com.cbcds.aventura.navigation.OnboardingScreen
 import com.cbcds.aventura.navigation.Router
 import com.cbcds.aventura.navigation.rememberRouter
 
@@ -36,10 +36,8 @@ fun AventuraApp(router: Router = rememberRouter()) {
                         .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal))
                 ) {
                     NavHost(
-                        navController = router.navController,
-                        onNavigateToScreen = router::navigate,
-                        onBackClick = router::onBackClick,
-                        startScreen = EmptyScreen(),
+                        router = router,
+                        startScreen = OnboardingScreen,
                         modifier = Modifier.padding(padding)
                     )
                 }

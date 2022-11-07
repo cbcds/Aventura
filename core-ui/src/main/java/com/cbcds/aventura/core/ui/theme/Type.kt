@@ -25,14 +25,14 @@ val AppTypography = Typography(
     labelMedium = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Medium,
-        letterSpacing = 0.5.sp,
+        letterSpacing = 0.3.sp,
         lineHeight = 16.sp,
         fontSize = 12.sp
     ),
     labelSmall = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Medium,
-        letterSpacing = 0.5.sp,
+        letterSpacing = 0.3.sp,
         lineHeight = 16.sp,
         fontSize = 11.sp
     ),
@@ -53,7 +53,7 @@ val AppTypography = Typography(
     bodySmall = TextStyle(
         fontFamily = Inter,
         fontWeight = FontWeight.Normal,
-        letterSpacing = 0.4.sp,
+        letterSpacing = 0.25.sp,
         lineHeight = 16.sp,
         fontSize = 12.sp
     ),
