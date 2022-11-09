@@ -13,10 +13,10 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "Aventura"
-include ":app"
-include ':core:ui'
-include ':core:navigation'
-include ':core:model'
-include ':core:data'
-include ':feature'
-include ':feature:auth'
+include(":app")
+include(":core:ui")
+include(":core:navigation")
+include(":core:model")
+include(":core:data")
+include(":feature")
+include(":feature:auth")

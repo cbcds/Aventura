@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.cbcds.aventura.core.ui.component.RadioButton
-import com.cbcds.aventura.model.AppFeature
+import com.cbcds.aventura.core.model.AppFeature
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState

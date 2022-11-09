@@ -1,6 +1,6 @@
 package com.cbcds.aventura.core.data.repository
 
-import com.cbcds.aventura.model.AppFeature
+import com.cbcds.aventura.core.model.AppFeature
 
 interface OnboardingRepository {
 

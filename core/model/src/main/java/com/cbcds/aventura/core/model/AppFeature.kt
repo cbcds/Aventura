@@ -1,4 +1,4 @@
-package com.cbcds.aventura.model
+package com.cbcds.aventura.core.model
 
 import androidx.annotation.DrawableRes
 

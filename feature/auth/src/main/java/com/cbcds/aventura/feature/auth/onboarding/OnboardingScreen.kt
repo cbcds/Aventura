@@ -17,7 +17,7 @@ import com.cbcds.aventura.feature.auth.R
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cbcds.aventura.core.ui.component.FilledTextButton
 import com.cbcds.aventura.core.ui.component.TextButton
-import com.cbcds.aventura.model.AppFeature
+import com.cbcds.aventura.core.model.AppFeature
 
 @Composable
 fun OnboardingScreen(
