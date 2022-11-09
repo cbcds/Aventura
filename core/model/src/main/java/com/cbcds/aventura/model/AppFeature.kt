@@ -1,4 +1,4 @@
-package com.cbcds.aventura.ui.onboarding
+package com.cbcds.aventura.model
 
 import androidx.annotation.DrawableRes
 

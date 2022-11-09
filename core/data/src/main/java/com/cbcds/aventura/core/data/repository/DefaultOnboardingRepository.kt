@@ -1,13 +1,14 @@
-package com.cbcds.aventura.ui.onboarding
+package com.cbcds.aventura.core.data.repository
 
 import android.content.Context
-import com.cbcds.aventura.R
+import com.cbcds.aventura.data.R
+import com.cbcds.aventura.model.AppFeature
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class OnboardingRepository @Inject constructor(
+class DefaultOnboardingRepository @Inject constructor(
     @ApplicationContext context: Context
-) {
+): OnboardingRepository {
 
     private val appFeatures = listOf(
         AppFeature(
@@ -32,5 +33,5 @@ class OnboardingRepository @Inject constructor(
         ),
     )
 
-    fun getAppFeatures() = appFeatures
+    override fun getAppFeatures() = appFeatures
 }

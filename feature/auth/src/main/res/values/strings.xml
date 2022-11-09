@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Log In</string>
+    <string name="register">Register</string>
+
+    <string name="onboarding_register_question">Don\'t have an account?</string>
+</resources>

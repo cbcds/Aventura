@@ -1,4 +1,4 @@
-package com.cbcds.aventura.ui.onboarding
+package com.cbcds.aventura.feature.auth.onboarding
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -13,10 +13,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.cbcds.aventura.feature.auth.R
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.cbcds.aventura.R
 import com.cbcds.aventura.core.ui.component.FilledTextButton
 import com.cbcds.aventura.core.ui.component.TextButton
+import com.cbcds.aventura.model.AppFeature
 
 @Composable
 fun OnboardingScreen(

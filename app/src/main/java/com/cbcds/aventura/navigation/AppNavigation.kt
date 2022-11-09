@@ -3,7 +3,7 @@ package com.cbcds.aventura.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.cbcds.aventura.core.navigation.Screen
-import com.cbcds.aventura.ui.onboarding.OnboardingScreen
+import com.cbcds.aventura.feature.auth.onboarding.OnboardingScreen
 
 object OnboardingScreen : Screen {
 
