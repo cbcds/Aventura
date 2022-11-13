@@ -35,6 +35,6 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.8.0")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha15")
+    implementation(libs.androidx.core.ktx)
+    api(libs.androidx.compose.material3)
 }

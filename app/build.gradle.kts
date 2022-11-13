@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.android.application)
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt)
     id("io.gitlab.arturbosch.detekt")
 }
 
@@ -54,26 +54,20 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":feature:auth"))
 
-    implementation("androidx.core:core-ktx:1.8.0")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha15")
-    implementation("androidx.compose.material3:material3-window-size-class:1.0.0-alpha15")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.activity:activity-compose:1.5.1")
-    implementation("androidx.navigation:navigation-compose:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-    implementation("androidx.navigation:navigation-runtime-ktx:2.5.1")
+    implementation(libs.androidx.core.ktx)
+    api(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation("com.google.dagger:hilt-android:2.44")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    kapt("com.google.dagger:hilt-compiler:2.44")
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.3.0-alpha02")
-
-    debugImplementation("androidx.compose.ui:ui-tooling:1.3.0-alpha02")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.3.0-alpha02")
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
 
 kapt {

@@ -1,8 +1,8 @@
 plugins {
-    id("com.android.library")
+    alias(libs.plugins.android.library)
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -33,12 +33,8 @@ android {
 dependencies {
     implementation(project(":core:model"))
 
-    implementation("androidx.core:core-ktx:1.8.0")
+    implementation(libs.androidx.core.ktx)
 
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-compiler:2.44")
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }

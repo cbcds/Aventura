@@ -30,6 +30,5 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.8.0")
-    testImplementation("junit:junit:4.13.2")
+    implementation(libs.androidx.core.ktx)
 }

@@ -41,21 +41,15 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:ui"))
 
-    implementation("androidx.core:core-ktx:1.8.0")
-    implementation("androidx.compose.material3:material3:1.0.0-alpha15")
-    implementation("androidx.navigation:navigation-compose:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+    implementation(libs.androidx.core.ktx)
+    api(libs.androidx.compose.material3)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.accompanist.pager)
 
-    implementation("com.google.dagger:hilt-android:2.44")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    kapt("com.google.dagger:hilt-compiler:2.44")
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
 
-    implementation("com.google.accompanist:accompanist-pager:0.27.0")
-
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-
-    debugImplementation("androidx.compose.ui:ui-tooling:1.3.0-alpha02")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.3.0-alpha02")
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
