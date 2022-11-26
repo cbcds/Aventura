@@ -1,9 +1,10 @@
 enableFeaturePreview("VERSION_CATALOGS")
 
 pluginManagement {
+    includeBuild("app-build")
     repositories {
-        gradlePluginPortal()
         google()
+        gradlePluginPortal()
         mavenCentral()
     }
 }
@@ -14,11 +15,11 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Aventura"
+rootProject.name = "aventura"
 include(":app")
-include(":core:ui")
-include(":core:navigation")
-include(":core:model")
 include(":core:data")
+include(":core:model")
+include(":core:navigation")
+include(":core:ui")
 include(":feature")
 include(":feature:auth")
