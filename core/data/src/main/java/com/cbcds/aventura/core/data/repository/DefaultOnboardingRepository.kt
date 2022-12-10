@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class DefaultOnboardingRepository @Inject constructor(
     @ApplicationContext context: Context
-): OnboardingRepository {
+) : OnboardingRepository {
 
     private val appFeatures = listOf(
         AppFeature(

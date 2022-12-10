@@ -1,4 +1,4 @@
-package com.cbcds.aventura.core.ui.component
+package com.cbcds.aventura.core.ui.component.base
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme

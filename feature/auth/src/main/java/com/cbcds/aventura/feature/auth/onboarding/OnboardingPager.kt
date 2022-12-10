@@ -2,7 +2,15 @@ package com.cbcds.aventura.feature.auth.onboarding
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.cbcds.aventura.core.ui.component.RadioButton
 import com.cbcds.aventura.core.model.AppFeature
+import com.cbcds.aventura.core.ui.component.base.RadioButton
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -27,7 +35,6 @@ fun OnboardingPager(items: List<AppFeature>, modifier: Modifier = Modifier) {
         HorizontalPager(count = items.size, state = pagerState) {
             OnboardingPagerItem(items[currentPage])
         }
-
         OnboardingPagerIndicator(pagerState, modifier = Modifier.padding(top = 50.dp))
     }
 }
@@ -42,18 +49,18 @@ private fun OnboardingPagerItem(item: AppFeature) {
             painter = painterResource(item.imageResId),
             modifier = Modifier.height(200.dp),
             alignment = Alignment.Center,
-            contentDescription = ""
+            contentDescription = null,
         )
         Text(
             text = item.title,
             modifier = Modifier.padding(start = 20.dp, top = 45.dp, end = 20.dp),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineLarge
+            style = MaterialTheme.typography.headlineLarge,
         )
         Text(
             text = item.subtitle,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
 }
@@ -83,7 +90,7 @@ private fun OnboardingPagerIndicator(pagerState: PagerState, modifier: Modifier 
                 RadioButton(
                     selected = true,
                     onClick = {},
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(18.dp),
                 )
             }
 
