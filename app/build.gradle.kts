@@ -2,6 +2,7 @@ plugins {
     id("com.cbcds.aventura.app")
     id("com.cbcds.aventura.app.compose")
     id("com.cbcds.aventura.hilt")
+    id("com.google.gms.google-services")
 }
 
 android {
