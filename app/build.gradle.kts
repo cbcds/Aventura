@@ -2,7 +2,6 @@ plugins {
     id("com.cbcds.aventura.app")
     id("com.cbcds.aventura.app.compose")
     id("com.cbcds.aventura.hilt")
-    id("io.gitlab.arturbosch.detekt")
 }
 
 android {
@@ -40,7 +39,6 @@ dependencies {
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
 }

@@ -1,4 +1,4 @@
-package com.cbcds.aventura.core.ui.component
+package com.cbcds.aventura.core.ui.component.base
 
 import androidx.compose.material3.CheckboxColors
 import androidx.compose.material3.MaterialTheme

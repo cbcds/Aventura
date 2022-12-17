@@ -1,7 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login">Log In</string>
-    <string name="register">Register</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
 
-    <string name="onboarding_register_question">Don\'t have an account?</string>
+    <string name="sign_up_question">Don\'t have an account?</string>
+    <string name="sign_in_question">Already have an account?</string>
+    <string name="continue_with_sso">or continue with</string>
+
+    <string name="username_text_field_title">Username</string>
+    <string name="empty_username_error">Please enter a username</string>
+    <string name="username_too_short_error">Username must contain at least 4 characters</string>
+    <string name="username_invalid_chars_error">The following characters allowed: a–z, A–Z, 0–9, ._</string>
+
+    <string name="email_text_field_title">Email</string>
+    <string name="empty_email_error">Please enter an email</string>
+    <string name="invalid_email_error">Invalid email address</string>
+
+    <string name="password_text_field_title">Password</string>
+    <string name="empty_password_error">Please enter a password</string>
+    <string name="password_too_short_error">Password must contain at least 8 characters</string>
+    <string name="password_invalid_chars_error">The following characters allowed: a–z, A–Z, 0–9, @#$%^&amp;+=_</string>
 </resources>

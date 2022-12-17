@@ -18,6 +18,7 @@ dependencyResolutionManagement {
 rootProject.name = "aventura"
 include(":app")
 include(":core:data")
+include(":core:domain")
 include(":core:model")
 include(":core:navigation")
 include(":core:ui")

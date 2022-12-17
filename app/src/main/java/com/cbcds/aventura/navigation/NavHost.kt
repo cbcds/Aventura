@@ -2,17 +2,18 @@ package com.cbcds.aventura.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.cbcds.aventura.core.navigation.Screen
+import androidx.navigation.NavHostController
+import com.cbcds.aventura.core.navigation.ScreenFlow
 
 @Composable
 fun NavHost(
-    router: Router,
-    startScreen: Screen,
+    navController: NavHostController,
+    startScreenFlow: ScreenFlow,
     modifier: Modifier = Modifier,
 ) {
     androidx.navigation.compose.NavHost(
-        navController = router.navController,
-        startDestination = startScreen.route,
+        navController = navController,
+        startDestination = startScreenFlow.route,
         modifier = modifier,
     ) {
         appGraph()

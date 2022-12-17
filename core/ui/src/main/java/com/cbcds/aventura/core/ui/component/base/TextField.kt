@@ -1,9 +1,12 @@
-package com.cbcds.aventura.core.ui.component
+package com.cbcds.aventura.core.ui.component.base
 
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -19,9 +22,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.cbcds.aventura.core.ui.component.TextFieldDefaults.textFieldHelperTextPaddingValues
-import com.cbcds.aventura.core.ui.component.TextFieldDefaults.textFieldLabelPaddingValues
-import com.cbcds.aventura.core.ui.component.TextFieldDefaults.textFieldTextStyle
+import com.cbcds.aventura.core.ui.component.base.TextFieldDefaults.textFieldHelperTextPaddingValues
+import com.cbcds.aventura.core.ui.component.base.TextFieldDefaults.textFieldLabelPaddingValues
+import com.cbcds.aventura.core.ui.component.base.TextFieldDefaults.textFieldTextStyle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +37,7 @@ fun OutlinedTextField(
     label: String? = null,
     hint: String? = null,
     helperText: String? = null,
+    trailingIcon: @Composable() (() -> Unit)? = null,
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -44,7 +48,7 @@ fun OutlinedTextField(
     shape: Shape = TextFieldDefaults.TextFieldShape,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors()
 ) {
-    Column {
+    Column(modifier = modifier) {
         if (label != null) {
             Text(
                 text = label,
@@ -54,38 +58,42 @@ fun OutlinedTextField(
             )
         }
 
-        androidx.compose.material3.OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = modifier,
-            textStyle = textFieldTextStyle(),
-            enabled = enabled,
-            readOnly = readOnly,
-            placeholder = hint?.let { { Text(text = hint) } },
-            isError = isError,
-            visualTransformation = visualTransformation,
-            keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions,
-            singleLine = singleLine,
-            maxLines = maxLines,
-            interactionSource = interactionSource,
-            shape = shape,
-            colors = colors,
-        )
-
-        if (helperText != null) {
-            Text(
-                text = helperText,
-                style = TextFieldDefaults.textFieldHelperTextStyle(),
-                color = TextFieldDefaults.textFieldHelperTextColor(
-                    colors = colors,
-                    enabled = enabled,
-                    isError = isError,
-                    interactionSource = interactionSource
-                ),
-                modifier = Modifier.padding(textFieldHelperTextPaddingValues)
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            androidx.compose.material3.OutlinedTextField(
+                modifier = Modifier.weight(1f),
+                value = value,
+                onValueChange = onValueChange,
+                textStyle = textFieldTextStyle(),
+                enabled = enabled,
+                readOnly = readOnly,
+                placeholder = hint?.let { { Text(text = hint) } },
+                trailingIcon = trailingIcon,
+                isError = isError,
+                visualTransformation = visualTransformation,
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                singleLine = singleLine,
+                maxLines = maxLines,
+                interactionSource = interactionSource,
+                shape = shape,
+                colors = colors,
             )
         }
+
+        Text(
+            text = helperText.orEmpty(),
+            style = TextFieldDefaults.textFieldHelperTextStyle(),
+            color = TextFieldDefaults.textFieldHelperTextColor(
+                colors = colors,
+                enabled = enabled,
+                isError = isError,
+                interactionSource = interactionSource
+            ),
+            modifier = Modifier.padding(textFieldHelperTextPaddingValues)
+        )
     }
 }
 
@@ -111,9 +119,11 @@ object TextFieldDefaults {
         textColor: Color = MaterialTheme.colorScheme.onSurface,
         disabledTextColor: Color = MaterialTheme.colorScheme.onSurface
             .copy(alpha = DisabledTextFieldAlpha),
-        containerColor: Color = Color.Transparent,
+        containerColor: Color = MaterialTheme.colorScheme.surfaceVariant
+            .copy(alpha = TextFieldContainerAlpha),
         focusedBorderColor: Color = MaterialTheme.colorScheme.primary,
-        unfocusedBorderColor: Color = MaterialTheme.colorScheme.outline,
+        unfocusedBorderColor: Color = MaterialTheme.colorScheme.outline
+            .copy(alpha = TextFieldBorderAlpha),
         disabledBorderColor: Color = MaterialTheme.colorScheme.onSurface
             .copy(alpha = DisabledTextFieldAlpha),
         errorBorderColor: Color = MaterialTheme.colorScheme.error,
@@ -157,6 +167,7 @@ object TextFieldDefaults {
     ).value
 
     private const val DisabledTextFieldAlpha = 0.35f
-
     private const val TextFieldTitleAlpha = 0.8f
+    private const val TextFieldBorderAlpha = 0.3f
+    private const val TextFieldContainerAlpha = 0.4f
 }

@@ -1,4 +1,4 @@
-package com.cbcds.aventura.core.ui.component
+package com.cbcds.aventura.core.ui.component.base
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -21,7 +21,7 @@ fun Switch(
         checked = checked,
         onCheckedChange = onCheckedChange,
         modifier = modifier,
-        thumbContent = { Icon(imageVector = Icons.Default.Add, contentDescription = "") },
+        thumbContent = { Icon(imageVector = Icons.Default.Add, contentDescription = null) },
         enabled = enabled,
         colors = colors
     )
