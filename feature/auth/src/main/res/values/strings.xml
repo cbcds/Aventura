@@ -15,6 +15,7 @@
     <string name="email_text_field_title">Email</string>
     <string name="empty_email_error">Please enter an email</string>
     <string name="invalid_email_error">Invalid email address</string>
+    <string name="email_exists_error">Email already exists</string>
 
     <string name="password_text_field_title">Password</string>
     <string name="empty_password_error">Please enter a password</string>

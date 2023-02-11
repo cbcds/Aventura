@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="logo_app_name" translatable="false">AVENTURA</string>
+
+    <string name="unknown_error">Unknown error occurred</string>
 </resources>

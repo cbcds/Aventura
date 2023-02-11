@@ -1,7 +1,8 @@
-package com.cbcds.aventura.core.data.repository
+package com.cbcds.aventura.core.data.internal
 
 import android.content.Context
 import com.cbcds.aventura.core.data.R
+import com.cbcds.aventura.core.data.api.OnboardingRepository
 import com.cbcds.aventura.core.model.AppFeature
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject

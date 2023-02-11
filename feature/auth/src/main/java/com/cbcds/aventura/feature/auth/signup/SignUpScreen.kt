@@ -1,5 +1,6 @@
 package com.cbcds.aventura.feature.auth.signup
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cbcds.aventura.core.common.exception.EmailAlreadyInUseException
 import com.cbcds.aventura.core.ui.component.AppLogo
 import com.cbcds.aventura.core.ui.component.base.FilledTextButton
 import com.cbcds.aventura.core.ui.component.base.IconButton
@@ -144,6 +147,15 @@ private fun SignUpScreen(
     if (isLoadingState) {
         LoadingScreen()
     }
+
+    if (signUpState is SignUpUiState.AuthError &&
+        signUpState.cause !is EmailAlreadyInUseException) {
+        Toast.makeText(
+            LocalContext.current,
+            signUpState.cause.toErrorStringId(),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }
 
 @Composable
@@ -159,13 +171,16 @@ private fun UserDataTextFields(
 ) {
     val textFieldModifier = Modifier.padding(horizontal = 25.dp)
 
-    val errorState = signUpState as? SignUpUiState.ValidationError
+    val validationErrorState = signUpState as? SignUpUiState.ValidationError
+    val authErrorState = signUpState as? SignUpUiState.AuthError
     val usernameValidationError =
-        errorState?.usernameError?.toErrorStringId()?.let { stringResource(it) }
+        validationErrorState?.usernameError?.toErrorStringId()?.let { stringResource(it) }
     val emailValidationError =
-        errorState?.emailError?.toErrorStringId()?.let { stringResource(it) }
+        (validationErrorState?.emailError?.toErrorStringId()
+            ?: (authErrorState?.cause as? EmailAlreadyInUseException)?.toErrorStringId())
+            ?.let { stringResource(it) }
     val passwordValidationError =
-        errorState?.passwordError?.toErrorStringId()?.let { stringResource(it) }
+        validationErrorState?.passwordError?.toErrorStringId()?.let { stringResource(it) }
 
     val focusManager = LocalFocusManager.current
     Column(modifier = modifier) {

@@ -14,9 +14,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cbcds.aventura.core.navigation.NavigationManager
+import com.cbcds.aventura.core.navigation.NavigationState
 import com.cbcds.aventura.core.ui.component.base.Background
 import com.cbcds.aventura.core.ui.theme.AventuraAppTheme
+import com.cbcds.aventura.core.user.AuthStateManager
 import com.cbcds.aventura.feature.auth.navigation.AuthFlow
 import com.cbcds.aventura.navigation.AppNavigation
 import com.cbcds.aventura.navigation.NavHost

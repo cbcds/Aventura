@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
 import com.cbcds.aventura.core.navigation.NavigationManager
+import com.cbcds.aventura.core.user.AuthStateManager
 import com.cbcds.aventura.ui.AventuraApp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

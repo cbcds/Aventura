@@ -32,8 +32,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:ui"))
+    implementation(project(":core:model"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:user"))
     implementation(project(":feature:auth"))
 
     implementation(libs.androidx.core.ktx)
