@@ -29,4 +29,8 @@ class AventuraNavigationManager @Inject constructor() : NavigationManager {
     override fun onNavigated() {
         _navigationState.value = Idle
     }
+
+    /*override fun onNavigated(screen: Screen) {
+        _navigationState.value = Idle(screen)
+    }*/
 }

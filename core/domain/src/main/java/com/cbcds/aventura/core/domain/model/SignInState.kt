@@ -4,5 +4,5 @@ sealed interface SignInState {
 
     object Success : SignInState
 
-    object Error : SignInState
+    data class Error(val cause: Throwable) : SignInState
 }

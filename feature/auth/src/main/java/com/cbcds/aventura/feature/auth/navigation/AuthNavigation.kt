@@ -45,3 +45,7 @@ fun NavGraphBuilder.authGraph() {
         }
     }
 }
+
+fun String.isAuthFlowScreen(): Boolean {
+    return this == OnboardingScreen.route || this == SignUpScreen.route || this == SignInScreen.route
+}

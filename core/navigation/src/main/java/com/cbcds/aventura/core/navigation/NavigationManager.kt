@@ -13,4 +13,5 @@ interface NavigationManager {
     fun navigateBack()
 
     fun onNavigated()
+   // fun onNavigated(screen: Screen)
 }

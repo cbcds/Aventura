@@ -9,12 +9,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.cbcds.aventura.core.navigation.NavigationManager
 import com.cbcds.aventura.core.navigation.NavigationState
 import com.cbcds.aventura.core.user.AuthStateManager
 import com.cbcds.aventura.feature.auth.navigation.authGraph
+import com.cbcds.aventura.feature.auth.navigation.OnboardingScreen
+import com.cbcds.aventura.feature.auth.navigation.isAuthFlowScreen
 import com.cbcds.aventura.ui.MainScreen
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -22,7 +23,7 @@ import com.cbcds.aventura.ui.MainScreen
 fun AppNavigation(
     navigationState: NavigationState,
     navigationManager: NavigationManager,
-    router: Router
+    router: Router,
 ) {
     LaunchedEffect(navigationState) {
         when (navigationState) {
@@ -42,6 +43,8 @@ fun AppNavigation(
     val user by AuthStateManager.userFlow.collectAsStateWithLifecycle()
     if (user != null) {
         navigationManager.navigateTo(MainScreen)
+    } else if (router.navController.currentDestination?.route?.isAuthFlowScreen() != true) {
+        navigationManager.navigateTo(OnboardingScreen)
     }
 }
 

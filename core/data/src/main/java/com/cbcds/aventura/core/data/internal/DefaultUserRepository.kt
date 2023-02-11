@@ -12,6 +12,14 @@ class DefaultUserRepository @Inject constructor(
         userApi.signUpWithEmailAndPassword(email, password)
     }
 
+    override suspend fun signInWithEmailAndPassword(email: String, password: String) {
+        userApi.signInWithEmailAndPassword(email, password)
+    }
+
+    override suspend fun signOut() {
+        userApi.signOut()
+    }
+
     override suspend fun updateUsername(username: String) {
         userApi.updateUsername(username)
     }

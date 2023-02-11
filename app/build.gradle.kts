@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":core:ui"))
     implementation(project(":core:user"))
+    implementation(project(":core:domain"))
     implementation(project(":feature:auth"))
 
     implementation(libs.androidx.core.ktx)
@@ -44,6 +45,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 }
 
 kapt {

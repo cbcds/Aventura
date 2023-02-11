@@ -15,7 +15,7 @@ class FirebaseUserApi @Inject constructor() : UserApi {
         Firebase.auth.useEmulator("10.0.2.2", 9099)
     }
 
-    override suspend fun signUpWithEmailAndPassword(email: String, password: String) =
+    override suspend fun signUpWithEmailAndPassword(email: String, password: String) {
         suspendCancellableCoroutine { continuation ->
             Firebase.auth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener {
@@ -29,8 +29,33 @@ class FirebaseUserApi @Inject constructor() : UserApi {
                 }
             // TODO invoke on cancellation
         }
+    }
 
-    override suspend fun updateUsername(username: String) =
+    override suspend fun signInWithEmailAndPassword(email: String, password: String) {
+        suspendCancellableCoroutine { continuation ->
+            Firebase.auth.signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener {
+                    continuation.resumeWith(Result.success(Unit))
+                }.addOnFailureListener {
+                    val exception = when (it) {
+                        is FirebaseAuthException -> it.toAuthException()
+                        else -> it
+                    }
+                    continuation.resumeWithException(exception)
+                }
+            // TODO invoke on cancellation
+        }
+    }
+
+    override suspend fun signOut() {
+        suspendCancellableCoroutine { continuation ->
+            Firebase.auth.signOut()
+            continuation.resumeWith(Result.success(Unit))
+            // TODO invoke on cancellation
+        }
+    }
+
+    override suspend fun updateUsername(username: String) {
         suspendCancellableCoroutine { continuation ->
             // TODO exceptions handling
             Firebase.auth.currentUser?.updateProfile(
@@ -41,4 +66,5 @@ class FirebaseUserApi @Inject constructor() : UserApi {
                 continuation.resumeWithException(it)
             }
         }
+    }
 }

@@ -1,5 +1,6 @@
 package com.cbcds.aventura.feature.auth.signin
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -36,6 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cbcds.aventura.core.common.exception.EmailAlreadyInUseException
+import com.cbcds.aventura.core.common.exception.InvalidPasswordException
+import com.cbcds.aventura.core.common.exception.UserNotFoundException
 import com.cbcds.aventura.core.ui.component.AppLogo
 import com.cbcds.aventura.core.ui.component.base.FilledTextButton
 import com.cbcds.aventura.core.ui.component.base.IconButton
@@ -45,6 +50,7 @@ import com.cbcds.aventura.core.ui.utils.withClearFocus
 import com.cbcds.aventura.feature.auth.EmailTextField
 import com.cbcds.aventura.feature.auth.PasswordTextField
 import com.cbcds.aventura.feature.auth.R
+import com.cbcds.aventura.feature.auth.signup.SignUpUiState
 import com.cbcds.aventura.feature.auth.utils.toErrorStringId
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -135,6 +141,16 @@ private fun SignUpScreen(
     if (isLoadingState) {
         LoadingScreen()
     }
+
+    if (signInState is SignInUiState.AuthError &&
+        signInState.cause !is UserNotFoundException &&
+        signInState.cause !is InvalidPasswordException) {
+        Toast.makeText(
+            LocalContext.current,
+            signInState.cause.toErrorStringId(),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
 }
 
 @Composable
@@ -148,11 +164,16 @@ private fun UserDataTextFields(
 ) {
     val textFieldModifier = Modifier.padding(horizontal = 25.dp)
 
-    val errorState = signInState as? SignInUiState.ValidationError
+    val validationErrorState = signInState as? SignInUiState.ValidationError
+    val authErrorState = signInState as? SignInUiState.AuthError
     val emailValidationError =
-        errorState?.emailError?.toErrorStringId()?.let { stringResource(it) }
+        (validationErrorState?.emailError?.toErrorStringId()
+            ?: (authErrorState?.cause as? UserNotFoundException)?.toErrorStringId())
+            ?.let { stringResource(it) }
     val passwordValidationError =
-        errorState?.passwordError?.toErrorStringId()?.let { stringResource(it) }
+        (validationErrorState?.passwordError?.toErrorStringId()
+            ?: (authErrorState?.cause as? InvalidPasswordException)?.toErrorStringId())
+            ?.let { stringResource(it) }
 
     val focusManager = LocalFocusManager.current
     Column(modifier = modifier) {

@@ -10,6 +10,7 @@ import com.cbcds.aventura.core.domain.model.SignInDataValidationResult
 import com.cbcds.aventura.core.domain.model.SignInState
 import com.cbcds.aventura.core.navigation.NavigationManager
 import com.cbcds.aventura.feature.auth.navigation.SignUpScreen
+import com.cbcds.aventura.feature.auth.signup.SignUpUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -97,7 +98,7 @@ class SignInViewModel @Inject constructor(
     private fun SignInState.toSignInUiState(): SignInUiState {
         return when (this) {
             is SignInState.Success -> SignInUiState.Success
-            is SignInState.Error -> SignInUiState.AuthError
+            is SignInState.Error -> SignInUiState.AuthError(cause)
         }
     }
 }
@@ -116,5 +117,5 @@ sealed interface SignInUiState {
         val showLoading: Boolean = false,
     ) : SignInUiState
 
-    object AuthError : SignInUiState
+    data class AuthError(val cause: Throwable) : SignInUiState
 }
