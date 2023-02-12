@@ -8,5 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:common"))
+
     implementation(libs.accompanist.pager)
 }

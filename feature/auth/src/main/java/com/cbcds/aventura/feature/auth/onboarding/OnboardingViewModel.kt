@@ -1,7 +1,7 @@
 package com.cbcds.aventura.feature.auth.onboarding
 
 import androidx.lifecycle.ViewModel
-import com.cbcds.aventura.core.data.repository.OnboardingRepository
+import com.cbcds.aventura.core.data.api.OnboardingRepository
 import com.cbcds.aventura.core.model.AppFeature
 import com.cbcds.aventura.core.navigation.NavigationManager
 import com.cbcds.aventura.feature.auth.navigation.SignInScreen

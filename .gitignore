@@ -30,7 +30,7 @@ captures/
 
 # IntelliJ
 *.iml
-.idea/*
+/.idea/*
 !/.idea/codeStyles
 /.idea/codeStyles/*
 !/.idea/codeStyles/Project.xml

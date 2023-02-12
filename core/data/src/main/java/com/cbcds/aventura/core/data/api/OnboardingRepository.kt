@@ -1,4 +1,4 @@
-package com.cbcds.aventura.core.data.repository
+package com.cbcds.aventura.core.data.api
 
 import com.cbcds.aventura.core.model.AppFeature
 

@@ -16,6 +16,10 @@
     <string name="empty_email_error">Please enter an email</string>
     <string name="invalid_email_error">Invalid email address</string>
 
+    <string name="email_exists_error">Email already exists</string>
+    <string name="user_not_found_error">User not found</string>
+    <string name="incorrect_password_error">Incorrect password</string>
+
     <string name="password_text_field_title">Password</string>
     <string name="empty_password_error">Please enter a password</string>
     <string name="password_too_short_error">Password must contain at least 8 characters</string>

@@ -8,6 +8,7 @@ pluginManagement {
         mavenCentral()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -15,12 +16,15 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
 rootProject.name = "aventura"
 include(":app")
+include(":core:common")
 include(":core:data")
 include(":core:domain")
 include(":core:model")
 include(":core:navigation")
+include(":core:network")
 include(":core:ui")
-include(":feature")
+include(":core:user")
 include(":feature:auth")

@@ -12,6 +12,7 @@ class AppConventionPlugin : Plugin<Project> {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
                 apply("io.gitlab.arturbosch.detekt")
+                apply("com.cbcds.aventura.hilt")
             }
 
             extensions.configure<ApplicationExtension> {

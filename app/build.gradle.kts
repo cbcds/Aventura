@@ -2,6 +2,7 @@ plugins {
     id("com.cbcds.aventura.app")
     id("com.cbcds.aventura.app.compose")
     id("com.cbcds.aventura.hilt")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -31,8 +32,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":core:ui"))
+    implementation(project(":core:model"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:user"))
+    implementation(project(":core:domain"))
     implementation(project(":feature:auth"))
 
     implementation(libs.androidx.core.ktx)
@@ -41,6 +45,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 }
 
 kapt {

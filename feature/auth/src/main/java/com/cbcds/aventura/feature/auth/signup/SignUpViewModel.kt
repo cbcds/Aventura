@@ -101,12 +101,12 @@ internal class SignUpViewModel @Inject constructor(
     private fun SignUpState.toSignUpUiState(): SignUpUiState {
         return when (this) {
             is SignUpState.Success -> SignUpUiState.Success
-            is SignUpState.Error -> SignUpUiState.AuthError
+            is SignUpState.Error -> SignUpUiState.AuthError(cause)
         }
     }
 }
 
-sealed interface SignUpUiState {
+internal sealed interface SignUpUiState {
 
     data class Initial(
         val showLoading: Boolean = false,
@@ -121,5 +121,5 @@ sealed interface SignUpUiState {
         val showLoading: Boolean = false,
     ) : SignUpUiState
 
-    object AuthError : SignUpUiState
+    data class AuthError(val cause: Throwable) : SignUpUiState
 }

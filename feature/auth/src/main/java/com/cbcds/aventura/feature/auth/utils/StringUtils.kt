@@ -1,10 +1,14 @@
 package com.cbcds.aventura.feature.auth.utils
 
 import androidx.annotation.StringRes
+import com.cbcds.aventura.core.common.exception.EmailAlreadyInUseException
+import com.cbcds.aventura.core.common.exception.InvalidPasswordException
+import com.cbcds.aventura.core.common.exception.UserNotFoundException
 import com.cbcds.aventura.core.domain.model.EmailValidationResult
 import com.cbcds.aventura.core.domain.model.PasswordValidationResult
 import com.cbcds.aventura.core.domain.model.UsernameValidationResult
 import com.cbcds.aventura.feature.auth.R
+import com.cbcds.aventura.core.ui.R as coreR
 
 @StringRes
 fun UsernameValidationResult.UsernameError.toErrorStringId(): Int {
@@ -29,5 +33,14 @@ fun PasswordValidationResult.PasswordError.toErrorStringId(): Int {
         PasswordValidationResult.PasswordError.BLANK -> R.string.empty_password_error
         PasswordValidationResult.PasswordError.TOO_SHORT -> R.string.password_too_short_error
         PasswordValidationResult.PasswordError.HAS_INVALID_CHARS -> R.string.password_invalid_chars_error
+    }
+}
+
+fun Throwable.toErrorStringId(): Int {
+    return when (this) {
+        is EmailAlreadyInUseException -> R.string.email_exists_error
+        is UserNotFoundException -> R.string.user_not_found_error
+        is InvalidPasswordException -> R.string.incorrect_password_error
+        else -> coreR.string.unknown_error
     }
 }
