@@ -5,9 +5,8 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
-import kotlin.coroutines.resumeWithException
 
 class FirebaseUserApi @Inject constructor() : UserApi {
 
@@ -16,55 +15,34 @@ class FirebaseUserApi @Inject constructor() : UserApi {
     }
 
     override suspend fun signUpWithEmailAndPassword(email: String, password: String) {
-        suspendCancellableCoroutine { continuation ->
-            Firebase.auth.createUserWithEmailAndPassword(email, password)
-                .addOnSuccessListener {
-                    continuation.resumeWith(Result.success(Unit))
-                }.addOnFailureListener {
-                    val exception = when (it) {
-                        is FirebaseAuthException -> it.toAuthException()
-                        else -> it
-                    }
-                    continuation.resumeWithException(exception)
+        Firebase.auth.createUserWithEmailAndPassword(email, password)
+            .addOnFailureListener {
+                throw when (it) {
+                    is FirebaseAuthException -> it.toAuthException()
+                    else -> it
                 }
-            // TODO invoke on cancellation
-        }
+            }
+            .await()
     }
 
     override suspend fun signInWithEmailAndPassword(email: String, password: String) {
-        suspendCancellableCoroutine { continuation ->
-            Firebase.auth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener {
-                    continuation.resumeWith(Result.success(Unit))
-                }.addOnFailureListener {
-                    val exception = when (it) {
-                        is FirebaseAuthException -> it.toAuthException()
-                        else -> it
-                    }
-                    continuation.resumeWithException(exception)
+        Firebase.auth.signInWithEmailAndPassword(email, password)
+            .addOnFailureListener {
+                throw when (it) {
+                    is FirebaseAuthException -> it.toAuthException()
+                    else -> it
                 }
-            // TODO invoke on cancellation
-        }
+            }
+            .await()
     }
 
     override suspend fun signOut() {
-        suspendCancellableCoroutine { continuation ->
-            Firebase.auth.signOut()
-            continuation.resumeWith(Result.success(Unit))
-            // TODO invoke on cancellation
-        }
+        Firebase.auth.signOut()
     }
 
     override suspend fun updateUsername(username: String) {
-        suspendCancellableCoroutine { continuation ->
-            // TODO exceptions handling
-            Firebase.auth.currentUser?.updateProfile(
-                UserProfileChangeRequest.Builder().setDisplayName(username).build()
-            )?.addOnSuccessListener {
-                continuation.resumeWith(Result.success(Unit))
-            }?.addOnFailureListener {
-                continuation.resumeWithException(it)
-            }
-        }
+        Firebase.auth.currentUser?.updateProfile(
+            UserProfileChangeRequest.Builder().setDisplayName(username).build()
+        )?.await()
     }
 }
