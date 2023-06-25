@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
-import com.cbcds.aventura.core.navigation.NavigationManager
-import com.cbcds.aventura.core.user.AuthStateManager
+import com.cbcds.aventura.core.navigation.NavigationController
 import com.cbcds.aventura.ui.AventuraApp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -14,7 +13,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var navigationManager: NavigationManager
+    lateinit var navigationController: NavigationController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +21,7 @@ class MainActivity : ComponentActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
         setContent {
-            AventuraApp(navigationManager)
+            AventuraApp(navigationController)
         }
     }
 }

@@ -18,16 +18,4 @@ class SignUpUseCase @Inject constructor(
             SignUpState.Error(it)
         }
     }
-
-    suspend fun signUpWithGoogle(): SignUpState {
-        return SignUpState.Success
-    }
-
-    suspend fun signUpWithFacebook(): SignUpState {
-        return SignUpState.Success
-    }
-
-    suspend fun signUpWithGithub(): SignUpState {
-        return SignUpState.Success
-    }
 }

@@ -1,13 +1,11 @@
 package com.cbcds.aventura.core.common.exception
 
-sealed class AuthException : Exception()
+sealed class AuthException : AventuraException()
 
-class EmailAlreadyInUseException : AuthException()
+object EmailAlreadyInUseException : AuthException()
 
-class UserDisabledException : AuthException()
+object UserDisabledException : AuthException()
 
-class UserNotFoundException : AuthException()
+object UserNotFoundException : AuthException()
 
-class InvalidPasswordException : AuthException()
-
-class UnknownException : AuthException()
+object InvalidPasswordException : AuthException()

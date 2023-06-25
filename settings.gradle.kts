@@ -3,8 +3,8 @@ enableFeaturePreview("VERSION_CATALOGS")
 pluginManagement {
     includeBuild("app-build")
     repositories {
-        google()
         gradlePluginPortal()
+        google()
         mavenCentral()
     }
 }

@@ -1,7 +1,12 @@
 package com.cbcds.aventura.core.network.internal.user
 
+import com.cbcds.aventura.core.common.exception.UnknownException
+import com.cbcds.aventura.core.common.utils.runSuspendCatching
+import com.cbcds.aventura.core.network.BuildConfig
+import com.cbcds.aventura.core.network.firebase.FirebaseEmulator
 import com.cbcds.aventura.core.network.api.UserApi
 import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -11,29 +16,43 @@ import javax.inject.Inject
 class FirebaseUserApi @Inject constructor() : UserApi {
 
     init {
-        Firebase.auth.useEmulator("10.0.2.2", 9099)
+        if (BuildConfig.DEBUG) {
+            FirebaseEmulator.enableAuth()
+        }
     }
 
     override suspend fun signUpWithEmailAndPassword(email: String, password: String) {
-        Firebase.auth.createUserWithEmailAndPassword(email, password)
-            .addOnFailureListener {
-                throw when (it) {
-                    is FirebaseAuthException -> it.toAuthException()
-                    else -> it
-                }
+        runSuspendCatching {
+            Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+        }.onFailure {
+            throw when (it) {
+                is FirebaseAuthException -> it.toAventuraException()
+                else -> UnknownException()
             }
-            .await()
+        }
     }
 
     override suspend fun signInWithEmailAndPassword(email: String, password: String) {
-        Firebase.auth.signInWithEmailAndPassword(email, password)
-            .addOnFailureListener {
-                throw when (it) {
-                    is FirebaseAuthException -> it.toAuthException()
-                    else -> it
-                }
+        runSuspendCatching {
+            Firebase.auth.signInWithEmailAndPassword(email, password).await()
+        }.onFailure {
+            throw when (it) {
+                is FirebaseAuthException -> it.toAventuraException()
+                else -> UnknownException()
             }
-            .await()
+        }
+    }
+
+    override suspend fun authWithGoogle(token: String?) {
+        runSuspendCatching {
+            val firebaseCredential = GoogleAuthProvider.getCredential(token, null)
+            Firebase.auth.signInWithCredential(firebaseCredential).await()
+        }.onFailure {
+            throw when (it) {
+                is FirebaseAuthException -> it.toAventuraException()
+                else -> UnknownException()
+            }
+        }
     }
 
     override suspend fun signOut() {
@@ -41,8 +60,14 @@ class FirebaseUserApi @Inject constructor() : UserApi {
     }
 
     override suspend fun updateUsername(username: String) {
-        Firebase.auth.currentUser?.updateProfile(
-            UserProfileChangeRequest.Builder().setDisplayName(username).build()
-        )?.await()
+        runSuspendCatching {
+            Firebase.auth.currentUser
+                ?.updateProfile(
+                    UserProfileChangeRequest.Builder().setDisplayName(username).build()
+                )
+                ?.await()
+        }.onFailure {
+            throw UnknownException()
+        }
     }
 }

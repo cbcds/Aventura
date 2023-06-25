@@ -50,8 +50,11 @@ captures/
 .externalNativeBuild
 .cxx/
 
-# Google Services (e.g. APIs or Firebase)
-# google-services.json
+# Firebase files
+firebase.json
+.firebaserc
+firestore.indexes.json
+firestore.rules
 
 # Version control
 vcs.xml

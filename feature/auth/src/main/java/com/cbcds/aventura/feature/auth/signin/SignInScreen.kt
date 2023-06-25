@@ -38,7 +38,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cbcds.aventura.core.common.exception.EmailAlreadyInUseException
 import com.cbcds.aventura.core.common.exception.InvalidPasswordException
 import com.cbcds.aventura.core.common.exception.UserNotFoundException
 import com.cbcds.aventura.core.ui.component.AppLogo
@@ -50,7 +49,6 @@ import com.cbcds.aventura.core.ui.utils.withClearFocus
 import com.cbcds.aventura.feature.auth.EmailTextField
 import com.cbcds.aventura.feature.auth.PasswordTextField
 import com.cbcds.aventura.feature.auth.R
-import com.cbcds.aventura.feature.auth.signup.SignUpUiState
 import com.cbcds.aventura.feature.auth.utils.toErrorStringId
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
@@ -74,9 +72,9 @@ internal fun SignInScreen(
         onBlankSpaceClick = { focusManager.clearFocus() },
         onBackClick = viewModel::onBackClick,
         onSignInClick = { viewModel.signIn(email, password) }.withClearFocus(focusManager),
-        onGoogleSignInClick = viewModel::signInWithGoogle.withClearFocus(focusManager),
-        onFacebookSignInClick = viewModel::signInWithFacebook.withClearFocus(focusManager),
-        onGithubSignInClick = viewModel::signInWithGithub.withClearFocus(focusManager),
+        onGoogleAuthClick = viewModel::authWithGoogle.withClearFocus(focusManager),
+        onFacebookAuthClick = viewModel::authWithFacebook.withClearFocus(focusManager),
+        onGithubAuthClick = viewModel::authWithGithub.withClearFocus(focusManager),
         onSignUpClick = viewModel::toSignUpScreen,
     )
 }
@@ -91,9 +89,9 @@ private fun SignUpScreen(
     onBlankSpaceClick: (Offset) -> Unit,
     onBackClick: () -> Unit,
     onSignInClick: () -> Unit,
-    onGoogleSignInClick: () -> Unit,
-    onFacebookSignInClick: () -> Unit,
-    onGithubSignInClick: () -> Unit,
+    onGoogleAuthClick: () -> Unit,
+    onFacebookAuthClick: () -> Unit,
+    onGithubAuthClick: () -> Unit,
     onSignUpClick: () -> Unit,
 ) {
     val isLoadingState = signInState is SignInUiState.Initial && signInState.showLoading ||
@@ -128,9 +126,9 @@ private fun SignUpScreen(
         SignInButtons(
             modifier = Modifier.padding(top = 25.dp),
             onSignInClick = onSignInClick,
-            onGoogleSignInClick = onGoogleSignInClick,
-            onFacebookSignInClick = onFacebookSignInClick,
-            onGithubSignInClick = onGithubSignInClick,
+            onGoogleSignInClick = onGoogleAuthClick,
+            onFacebookSignInClick = onFacebookAuthClick,
+            onGithubSignInClick = onGithubAuthClick,
         )
         SignUpText(
             modifier = Modifier.padding(vertical = 40.dp),

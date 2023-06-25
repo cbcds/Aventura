@@ -45,7 +45,7 @@ class ValidateUserDataUseCase @Inject constructor() {
         }
     }
 
-    fun validateUsername(username: String): UsernameValidationResult {
+    private fun validateUsername(username: String): UsernameValidationResult {
         val errors = mutableSetOf<UsernameValidationResult.UsernameError>()
         if (username.isBlank()) {
             errors += UsernameValidationResult.UsernameError.BLANK
@@ -63,7 +63,7 @@ class ValidateUserDataUseCase @Inject constructor() {
         }
     }
 
-    fun validateEmail(username: String): EmailValidationResult {
+    private fun validateEmail(username: String): EmailValidationResult {
         val errors = mutableSetOf<EmailValidationResult.EmailError>()
         if (username.isBlank()) {
             errors += EmailValidationResult.EmailError.BLANK
@@ -78,7 +78,7 @@ class ValidateUserDataUseCase @Inject constructor() {
         }
     }
 
-    fun validatePassword(password: String): PasswordValidationResult {
+    private fun validatePassword(password: String): PasswordValidationResult {
         val errors = mutableSetOf<PasswordValidationResult.PasswordError>()
         if (password.isBlank()) {
             errors += PasswordValidationResult.PasswordError.BLANK

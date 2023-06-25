@@ -1,7 +1,7 @@
 package com.cbcds.aventura.core.navigation.di
 
-import com.cbcds.aventura.core.navigation.AventuraNavigationManager
-import com.cbcds.aventura.core.navigation.NavigationManager
+import com.cbcds.aventura.core.navigation.DefaultNavigationController
+import com.cbcds.aventura.core.navigation.NavigationController
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,7 +14,7 @@ interface NavigationModule {
 
     @Binds
     @Singleton
-    fun bindsNavigationManager(
-        navigationManager: AventuraNavigationManager
-    ): NavigationManager
+    fun bindsNavigationController(
+        navigationController: DefaultNavigationController,
+    ): NavigationController
 }

@@ -4,55 +4,48 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cbcds.aventura.core.navigation.NavigationManager
-import com.cbcds.aventura.core.navigation.NavigationState
+import com.cbcds.aventura.core.navigation.NavigationCommand
+import com.cbcds.aventura.core.navigation.NavigationController
 import com.cbcds.aventura.core.user.AuthStateManager
-import com.cbcds.aventura.feature.auth.navigation.authGraph
-import com.cbcds.aventura.feature.auth.navigation.OnboardingScreen
-import com.cbcds.aventura.feature.auth.navigation.isAuthFlowScreen
-import com.cbcds.aventura.ui.MainScreen
+import com.cbcds.aventura.feature.auth.navigation.AuthFlow
+import com.cbcds.aventura.ui.MainFlow
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun AppNavigation(
-    navigationState: NavigationState,
-    navigationManager: NavigationManager,
+    navigationController: NavigationController,
     router: Router,
+    modifier: Modifier = Modifier,
 ) {
+    val navigationState: NavigationCommand? by
+        navigationController.commands.collectAsStateWithLifecycle(null)
     LaunchedEffect(navigationState) {
-        when (navigationState) {
-            is NavigationState.NavigateToScreen ->
-                router.navigateTo(navigationState.screen)
-            is NavigationState.NavigateToScreenWithClearStack ->
-                router.navigateWithClearStack(navigationState.screen)
-            is NavigationState.NavigateBack ->
+        when (val command = navigationState) {
+            is NavigationCommand.NavigateToScreen ->
+                router.navigateTo(command.screen)
+            is NavigationCommand.NavigateToScreenAndClearStack ->
+                router.navigateWithClearStack(command.screen)
+            is NavigationCommand.NavigateForResult ->
+                router.navigateForResult(command.screen, command.resultFlow)
+            is NavigationCommand.NavigateBack ->
                 router.navigateBack()
+            is NavigationCommand.FinishWithResult ->
+                router.finishWithResult(command.result)
             else -> Unit
-        }
-        if (navigationState !is NavigationState.Idle) {
-            navigationManager.onNavigated()
         }
     }
 
     val user by AuthStateManager.userFlow.collectAsStateWithLifecycle()
-    if (user != null) {
-        navigationManager.navigateTo(MainScreen)
-    } else if (router.navController.currentDestination?.route?.isAuthFlowScreen() != true) {
-        navigationManager.navigateTo(OnboardingScreen)
-    }
-}
-
-fun NavGraphBuilder.appGraph() {
-    authGraph()
-    composable(MainScreen.route) {
-        MainScreen()
-    }
+    NavHost(
+        router = router,
+        startScreenFlow = if (user != null) MainFlow else AuthFlow,
+        modifier = modifier,
+    )
 }
 
 @Composable

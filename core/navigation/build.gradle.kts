@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.cbcds.aventura.core.navigation"
 }
+
+dependencies {
+    implementation(libs.androidx.navigation.compose)
+}

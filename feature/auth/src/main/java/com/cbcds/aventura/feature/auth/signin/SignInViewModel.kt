@@ -3,14 +3,16 @@ package com.cbcds.aventura.feature.auth.signin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cbcds.aventura.core.domain.SignInUseCase
+import com.cbcds.aventura.core.domain.SsoUseCase
 import com.cbcds.aventura.core.domain.ValidateUserDataUseCase
 import com.cbcds.aventura.core.domain.model.EmailValidationResult
 import com.cbcds.aventura.core.domain.model.PasswordValidationResult
 import com.cbcds.aventura.core.domain.model.SignInDataValidationResult
 import com.cbcds.aventura.core.domain.model.SignInState
-import com.cbcds.aventura.core.navigation.NavigationManager
+import com.cbcds.aventura.core.domain.model.SsoState
+import com.cbcds.aventura.core.navigation.NavigationController
+import com.cbcds.aventura.feature.auth.navigation.GoogleSsoScreen
 import com.cbcds.aventura.feature.auth.navigation.SignUpScreen
-import com.cbcds.aventura.feature.auth.signup.SignUpUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,14 +24,15 @@ import javax.inject.Inject
 class SignInViewModel @Inject constructor(
     private val validateUserDataUseCase: ValidateUserDataUseCase,
     private val signInUseCase: SignInUseCase,
-    private val navigationManager: NavigationManager,
+    private val ssoUseCase: SsoUseCase,
+    private val navigationController: NavigationController,
 ) : ViewModel() {
 
     private val _signInUiState = MutableStateFlow<SignInUiState>(SignInUiState.Initial())
     val signInUiState: StateFlow<SignInUiState>
         get() = _signInUiState
 
-    var signInJob: Job? = null
+    private var signInJob: Job? = null
 
     fun signIn(email: String, password: String) {
         val validateDataResult = validateUserDataUseCase.validateSignInData(email, password)
@@ -49,29 +52,27 @@ class SignInViewModel @Inject constructor(
         }
     }
 
-    fun signInWithGoogle() {
-        toStateWithLoading(_signInUiState.value)
+    fun authWithGoogle() {
+        val resultFlow = navigationController.navigateForResult(GoogleSsoScreen)
         signInJob = viewModelScope.launch {
-            _signInUiState.value = signInUseCase.signInWithGoogle().toSignInUiState()
+            resultFlow.collect {
+                it.onSuccess { result ->
+                    val token = result as? String
+                    toStateWithLoading(SignInUiState.Initial())
+                    _signInUiState.value = ssoUseCase.authWithGoogle(token).toSignInUiState()
+                }.onFailure { error ->
+                    _signInUiState.value = SignInUiState.AuthError(error)
+                }
+            }
         }
     }
 
-    fun signInWithFacebook() {
-        toStateWithLoading(_signInUiState.value)
-        signInJob = viewModelScope.launch {
-            _signInUiState.value = signInUseCase.signInWithFacebook().toSignInUiState()
-        }
-    }
+    fun authWithFacebook() {}
 
-    fun signInWithGithub() {
-        toStateWithLoading(_signInUiState.value)
-        signInJob = viewModelScope.launch {
-            _signInUiState.value = signInUseCase.signInWithGithub().toSignInUiState()
-        }
-    }
+    fun authWithGithub() {}
 
     fun toSignUpScreen() {
-        navigationManager.navigateAndClearStack(SignUpScreen)
+        navigationController.navigateAndClearStack(SignUpScreen)
     }
 
     fun onBackClick() {
@@ -99,6 +100,13 @@ class SignInViewModel @Inject constructor(
         return when (this) {
             is SignInState.Success -> SignInUiState.Success
             is SignInState.Error -> SignInUiState.AuthError(cause)
+        }
+    }
+
+    private fun SsoState.toSignInUiState(): SignInUiState {
+        return when (this) {
+            is SsoState.Success -> SignInUiState.Success
+            is SsoState.Error -> SignInUiState.AuthError(cause)
         }
     }
 }
