@@ -7,7 +7,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cbcds.aventura.core.navigation.Screen
+import com.cbcds.aventura.core.navigation.ScreenFlow
 import com.cbcds.aventura.core.user.AuthStateManager
+
+object MainFlow : ScreenFlow {
+
+    override val route: String = "mainFlow"
+}
 
 object MainScreen : Screen {
 

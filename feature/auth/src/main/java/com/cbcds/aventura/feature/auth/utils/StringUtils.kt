@@ -36,6 +36,7 @@ fun PasswordValidationResult.PasswordError.toErrorStringId(): Int {
     }
 }
 
+@StringRes
 fun Throwable.toErrorStringId(): Int {
     return when (this) {
         is EmailAlreadyInUseException -> R.string.email_exists_error

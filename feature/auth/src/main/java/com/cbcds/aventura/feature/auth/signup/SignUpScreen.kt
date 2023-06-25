@@ -76,9 +76,9 @@ internal fun SignUpScreen(
         onBackClick = viewModel::onBackClick,
         onSignUpClick =
         { viewModel.signUp(username, email, password) }.withClearFocus(focusManager),
-        onGoogleSignUpClick = viewModel::signUpWithGoogle.withClearFocus(focusManager),
-        onFacebookSignUpClick = viewModel::signUpWithFacebook.withClearFocus(focusManager),
-        onGithubSignUpClick = viewModel::signUpWithGithub.withClearFocus(focusManager),
+        onGoogleAuthClick = viewModel::authWithGoogle.withClearFocus(focusManager),
+        onFacebookAuthClick = viewModel::authWithFacebook.withClearFocus(focusManager),
+        onGithubAuthClick = viewModel::authWithGithub.withClearFocus(focusManager),
         onSignInClick = viewModel::toSignInScreen,
     )
 }
@@ -95,9 +95,9 @@ private fun SignUpScreen(
     onBlankSpaceClick: (Offset) -> Unit,
     onBackClick: () -> Unit,
     onSignUpClick: () -> Unit,
-    onGoogleSignUpClick: () -> Unit,
-    onFacebookSignUpClick: () -> Unit,
-    onGithubSignUpClick: () -> Unit,
+    onGoogleAuthClick: () -> Unit,
+    onFacebookAuthClick: () -> Unit,
+    onGithubAuthClick: () -> Unit,
     onSignInClick: () -> Unit,
 ) {
     val isLoadingState = signUpState is SignUpUiState.Initial && signUpState.showLoading ||
@@ -134,9 +134,9 @@ private fun SignUpScreen(
         SignUpButtons(
             modifier = Modifier.padding(top = 25.dp),
             onSignUpClick = onSignUpClick,
-            onGoogleSignUpClick = onGoogleSignUpClick,
-            onFacebookSignUpClick = onFacebookSignUpClick,
-            onGithubSignUpClick = onGithubSignUpClick,
+            onGoogleSignUpClick = onGoogleAuthClick,
+            onFacebookSignUpClick = onFacebookAuthClick,
+            onGithubSignUpClick = onGithubAuthClick,
         )
         SignInText(
             modifier = Modifier.padding(vertical = 40.dp),
@@ -153,7 +153,7 @@ private fun SignUpScreen(
         Toast.makeText(
             LocalContext.current,
             signUpState.cause.toErrorStringId(),
-            Toast.LENGTH_SHORT
+            Toast.LENGTH_SHORT,
         ).show()
     }
 }

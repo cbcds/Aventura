@@ -2,7 +2,8 @@ package com.cbcds.aventura.core.common.utils
 
 import kotlin.coroutines.cancellation.CancellationException
 
-suspend inline fun <R> runSuspendCatching(block: () -> R): Result<R> {
+@Suppress("TooGenericExceptionCaught")
+suspend inline fun <R> runSuspendCatching(crossinline block: suspend () -> R): Result<R> {
     return try {
         Result.success(block())
     } catch(c: CancellationException) {
