@@ -11,6 +11,6 @@ android {
 dependencies {
     implementation(project(":core:common"))
 
-    implementation(libs.accompanist.pager)
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.play.services.auth)
 }

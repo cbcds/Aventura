@@ -1,6 +1,5 @@
 package com.cbcds.aventura.feature.auth.signin
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -36,10 +35,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cbcds.aventura.core.common.exception.InvalidPasswordException
 import com.cbcds.aventura.core.common.exception.UserNotFoundException
+import com.cbcds.aventura.core.common.utils.showToast
 import com.cbcds.aventura.core.ui.component.AppLogo
 import com.cbcds.aventura.core.ui.component.base.FilledTextButton
 import com.cbcds.aventura.core.ui.component.base.IconButton
@@ -51,7 +50,6 @@ import com.cbcds.aventura.feature.auth.PasswordTextField
 import com.cbcds.aventura.feature.auth.R
 import com.cbcds.aventura.feature.auth.utils.toErrorStringId
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun SignInScreen(
     viewModel: SignInViewModel = hiltViewModel()
@@ -63,7 +61,7 @@ internal fun SignInScreen(
 
     val focusManager = LocalFocusManager.current
 
-    SignUpScreen(
+    SignInScreen(
         signInState = signInState,
         email = email,
         onEmailChange = { email = it },
@@ -80,7 +78,7 @@ internal fun SignInScreen(
 }
 
 @Composable
-private fun SignUpScreen(
+private fun SignInScreen(
     signInState: SignInUiState,
     email: String,
     onEmailChange: (String) -> Unit,
@@ -94,10 +92,7 @@ private fun SignUpScreen(
     onGithubAuthClick: () -> Unit,
     onSignUpClick: () -> Unit,
 ) {
-    val isLoadingState = signInState is SignInUiState.Initial && signInState.showLoading ||
-            signInState is SignInUiState.ValidationError && signInState.showLoading
-
-    BackHandler(enabled = isLoadingState) {
+    BackHandler(enabled = signInState.showLoading) {
         onBackClick()
     }
 
@@ -136,18 +131,14 @@ private fun SignUpScreen(
         )
     }
 
-    if (isLoadingState) {
+    if (signInState.showLoading) {
         LoadingScreen()
     }
 
-    if (signInState is SignInUiState.AuthError &&
-        signInState.cause !is UserNotFoundException &&
-        signInState.cause !is InvalidPasswordException) {
-        Toast.makeText(
-            LocalContext.current,
-            signInState.cause.toErrorStringId(),
-            Toast.LENGTH_SHORT
-        ).show()
+    signInState.authError?.let { error ->
+        if (error !is UserNotFoundException && error !is InvalidPasswordException) {
+            LocalContext.current.showToast(error.toErrorStringId())
+        }
     }
 }
 
@@ -162,15 +153,15 @@ private fun UserDataTextFields(
 ) {
     val textFieldModifier = Modifier.padding(horizontal = 25.dp)
 
-    val validationErrorState = signInState as? SignInUiState.ValidationError
-    val authErrorState = signInState as? SignInUiState.AuthError
+    val validationErrors = signInState.validationErrors
+    val authError = signInState.authError
     val emailValidationError =
-        (validationErrorState?.emailError?.toErrorStringId()
-            ?: (authErrorState?.cause as? UserNotFoundException)?.toErrorStringId())
+        (validationErrors?.emailError?.toErrorStringId()
+            ?: (authError as? UserNotFoundException)?.toErrorStringId())
             ?.let { stringResource(it) }
     val passwordValidationError =
-        (validationErrorState?.passwordError?.toErrorStringId()
-            ?: (authErrorState?.cause as? InvalidPasswordException)?.toErrorStringId())
+        (validationErrors?.passwordError?.toErrorStringId()
+            ?: (authError as? InvalidPasswordException)?.toErrorStringId())
             ?.let { stringResource(it) }
 
     val focusManager = LocalFocusManager.current

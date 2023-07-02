@@ -20,16 +20,14 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cbcds.aventura.core.model.AppFeature
 import com.cbcds.aventura.core.ui.component.base.FilledTextButton
 import com.cbcds.aventura.core.ui.component.base.TextButton
 import com.cbcds.aventura.feature.auth.R
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
-fun OnboardingScreen(
+internal fun OnboardingScreen(
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val appFeatures by viewModel.appFeatures.collectAsStateWithLifecycle()
@@ -41,7 +39,7 @@ fun OnboardingScreen(
 }
 
 @Composable
-fun OnboardingScreen(
+private fun OnboardingScreen(
     appFeatures: List<AppFeature>,
     onSignInButtonClick: () -> Unit,
     onSignUpButtonClick: () -> Unit,
@@ -86,6 +84,6 @@ fun OnboardingScreen(
 
 @Preview
 @Composable
-fun OnboardingScreenPreview() {
+private fun OnboardingScreenPreview() {
     OnboardingScreen()
 }

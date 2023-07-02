@@ -9,11 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun GoogleAuthScreen(
     viewModel: GoogleAuthViewModel = hiltViewModel()
