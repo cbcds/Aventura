@@ -36,9 +36,9 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cbcds.aventura.core.common.exception.EmailAlreadyInUseException
+import com.cbcds.aventura.core.common.utils.showToast
 import com.cbcds.aventura.core.ui.component.AppLogo
 import com.cbcds.aventura.core.ui.component.base.FilledTextButton
 import com.cbcds.aventura.core.ui.component.base.IconButton
@@ -51,7 +51,6 @@ import com.cbcds.aventura.feature.auth.R
 import com.cbcds.aventura.feature.auth.UsernameTextField
 import com.cbcds.aventura.feature.auth.utils.toErrorStringId
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 internal fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel()
@@ -100,10 +99,7 @@ private fun SignUpScreen(
     onGithubAuthClick: () -> Unit,
     onSignInClick: () -> Unit,
 ) {
-    val isLoadingState = signUpState is SignUpUiState.Initial && signUpState.showLoading ||
-            signUpState is SignUpUiState.ValidationError && signUpState.showLoading
-
-    BackHandler(enabled = isLoadingState) {
+    BackHandler(enabled = signUpState.showLoading) {
         onBackClick()
     }
 
@@ -144,17 +140,14 @@ private fun SignUpScreen(
         )
     }
 
-    if (isLoadingState) {
+    if (signUpState.showLoading) {
         LoadingScreen()
     }
 
-    if (signUpState is SignUpUiState.AuthError &&
-        signUpState.cause !is EmailAlreadyInUseException) {
-        Toast.makeText(
-            LocalContext.current,
-            signUpState.cause.toErrorStringId(),
-            Toast.LENGTH_SHORT,
-        ).show()
+    signUpState.authError?.let { error ->
+        if (error !is EmailAlreadyInUseException) {
+            LocalContext.current.showToast(error.toErrorStringId())
+        }
     }
 }
 
@@ -171,16 +164,16 @@ private fun UserDataTextFields(
 ) {
     val textFieldModifier = Modifier.padding(horizontal = 25.dp)
 
-    val validationErrorState = signUpState as? SignUpUiState.ValidationError
-    val authErrorState = signUpState as? SignUpUiState.AuthError
+    val validationErrors = signUpState.validationErrors
+    val authError = signUpState.authError
     val usernameValidationError =
-        validationErrorState?.usernameError?.toErrorStringId()?.let { stringResource(it) }
+        validationErrors?.usernameError?.toErrorStringId()?.let { stringResource(it) }
     val emailValidationError =
-        (validationErrorState?.emailError?.toErrorStringId()
-            ?: (authErrorState?.cause as? EmailAlreadyInUseException)?.toErrorStringId())
+        (validationErrors?.emailError?.toErrorStringId()
+            ?: (authError as? EmailAlreadyInUseException)?.toErrorStringId())
             ?.let { stringResource(it) }
     val passwordValidationError =
-        validationErrorState?.passwordError?.toErrorStringId()?.let { stringResource(it) }
+        validationErrors?.passwordError?.toErrorStringId()?.let { stringResource(it) }
 
     val focusManager = LocalFocusManager.current
     Column(modifier = modifier) {

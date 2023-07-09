@@ -2,17 +2,17 @@ package com.cbcds.aventura.feature.auth.signin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cbcds.aventura.core.domain.SignInUseCase
-import com.cbcds.aventura.core.domain.SsoUseCase
-import com.cbcds.aventura.core.domain.ValidateUserDataUseCase
-import com.cbcds.aventura.core.domain.model.EmailValidationResult
-import com.cbcds.aventura.core.domain.model.PasswordValidationResult
+import com.cbcds.aventura.core.common.exception.UnknownException
+import com.cbcds.aventura.core.domain.SignInInteractor
+import com.cbcds.aventura.core.domain.SsoInteractor
+import com.cbcds.aventura.core.domain.ValidateUserDataInteractor
+import com.cbcds.aventura.core.domain.model.EmailValidationError
+import com.cbcds.aventura.core.domain.model.PasswordValidationError
 import com.cbcds.aventura.core.domain.model.SignInDataValidationResult
-import com.cbcds.aventura.core.domain.model.SignInState
-import com.cbcds.aventura.core.domain.model.SsoState
 import com.cbcds.aventura.core.navigation.NavigationController
 import com.cbcds.aventura.feature.auth.navigation.GoogleSsoScreen
 import com.cbcds.aventura.feature.auth.navigation.SignUpScreen
+import com.cbcds.aventura.feature.auth.signin.SignInUiState.ValidationErrors
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,32 +21,35 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignInViewModel @Inject constructor(
-    private val validateUserDataUseCase: ValidateUserDataUseCase,
-    private val signInUseCase: SignInUseCase,
-    private val ssoUseCase: SsoUseCase,
+internal class SignInViewModel @Inject constructor(
+    private val validateUserDataInteractor: ValidateUserDataInteractor,
+    private val signInInteractor: SignInInteractor,
+    private val ssoInteractor: SsoInteractor,
     private val navigationController: NavigationController,
 ) : ViewModel() {
 
-    private val _signInUiState = MutableStateFlow<SignInUiState>(SignInUiState.Initial())
+    private val _signInUiState = MutableStateFlow(SignInUiState())
     val signInUiState: StateFlow<SignInUiState>
         get() = _signInUiState
 
     private var signInJob: Job? = null
 
     fun signIn(email: String, password: String) {
-        val validateDataResult = validateUserDataUseCase.validateSignInData(email, password)
+        val validateDataResult = validateUserDataInteractor.validateSignInData(email, password)
         when (validateDataResult) {
             is SignInDataValidationResult.Success -> {
-                toStateWithLoading(SignInUiState.Initial())
+                _signInUiState.value = SignInUiState(showLoading = true)
                 signInJob = viewModelScope.launch {
-                    _signInUiState.value = signInUseCase.signIn(email, password).toSignInUiState()
+                    _signInUiState.value =
+                        signInInteractor.signIn(email, password).toSignInUiState()
                 }
             }
             is SignInDataValidationResult.Error -> {
-                _signInUiState.value = SignInUiState.ValidationError(
-                    validateDataResult.emailError,
-                    validateDataResult.passwordError
+                _signInUiState.value = SignInUiState(
+                    validationErrors = ValidationErrors(
+                        validateDataResult.emailError,
+                        validateDataResult.passwordError,
+                    )
                 )
             }
         }
@@ -58,17 +61,21 @@ class SignInViewModel @Inject constructor(
             resultFlow.collect {
                 it.onSuccess { result ->
                     val token = result as? String
-                    toStateWithLoading(SignInUiState.Initial())
-                    _signInUiState.value = ssoUseCase.authWithGoogle(token).toSignInUiState()
+                    token?.let {
+                        toSsoLoadingState()
+                        _signInUiState.value = ssoInteractor.authWithGoogle(token).toSignInUiState()
+                    }
                 }.onFailure { error ->
-                    _signInUiState.value = SignInUiState.AuthError(error)
+                    toSsoErrorState(error)
                 }
             }
         }
     }
 
+    @Suppress("EmptyFunctionBlock")
     fun authWithFacebook() {}
 
+    @Suppress("EmptyFunctionBlock")
     fun authWithGithub() {}
 
     fun toSignUpScreen() {
@@ -77,53 +84,34 @@ class SignInViewModel @Inject constructor(
 
     fun onBackClick() {
         val currentState = _signInUiState.value
-        if (currentState is SignInUiState.Initial && currentState.showLoading) {
+        if (currentState.showLoading) {
             signInJob?.cancel()
-            _signInUiState.value = currentState.copy(showLoading = false)
-        }
-        if (currentState is SignInUiState.ValidationError && currentState.showLoading) {
-            signInJob?.cancel()
-            _signInUiState.value = currentState.copy(showLoading = false)
+            _signInUiState.value = _signInUiState.value.copy(showLoading = false, authError = null)
         }
     }
 
-    private fun toStateWithLoading(baseState: SignInUiState) {
-        if (baseState is SignInUiState.Initial) {
-            _signInUiState.value = baseState.copy(showLoading = true)
-        }
-        if (baseState is SignInUiState.ValidationError) {
-            _signInUiState.value = baseState.copy(showLoading = true)
-        }
+    private fun toSsoLoadingState() {
+        _signInUiState.value = _signInUiState.value.copy(showLoading = true, authError = null)
     }
 
-    private fun SignInState.toSignInUiState(): SignInUiState {
-        return when (this) {
-            is SignInState.Success -> SignInUiState.Success
-            is SignInState.Error -> SignInUiState.AuthError(cause)
-        }
+    private fun toSsoErrorState(authError: Throwable) {
+        _signInUiState.value =_signInUiState.value.copy(showLoading = false, authError = authError)
     }
 
-    private fun SsoState.toSignInUiState(): SignInUiState {
-        return when (this) {
-            is SsoState.Success -> SignInUiState.Success
-            is SsoState.Error -> SignInUiState.AuthError(cause)
-        }
+    private fun Result<Unit>.toSignInUiState(): SignInUiState {
+        val authError = if (isFailure) exceptionOrNull() ?: UnknownException() else null
+        return _signInUiState.value.copy(showLoading = false, authError = authError)
     }
 }
 
-sealed interface SignInUiState {
+internal data class SignInUiState(
+    val showLoading: Boolean = false,
+    val validationErrors: ValidationErrors? = null,
+    val authError: Throwable? = null,
+) {
 
-    data class Initial(
-        val showLoading: Boolean = false,
-    ) : SignInUiState
-
-    object Success : SignInUiState
-
-    data class ValidationError(
-        val emailError: EmailValidationResult.EmailError?,
-        val passwordError: PasswordValidationResult.PasswordError?,
-        val showLoading: Boolean = false,
-    ) : SignInUiState
-
-    data class AuthError(val cause: Throwable) : SignInUiState
+    data class ValidationErrors(
+        val emailError: EmailValidationError?,
+        val passwordError: PasswordValidationError?,
+    )
 }

@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -15,7 +14,6 @@ import com.cbcds.aventura.core.user.AuthStateManager
 import com.cbcds.aventura.feature.auth.navigation.AuthFlow
 import com.cbcds.aventura.ui.MainFlow
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable
 fun AppNavigation(
     navigationController: NavigationController,

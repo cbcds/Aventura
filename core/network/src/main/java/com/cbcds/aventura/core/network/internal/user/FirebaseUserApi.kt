@@ -27,7 +27,7 @@ class FirebaseUserApi @Inject constructor() : UserApi {
         }.onFailure {
             throw when (it) {
                 is FirebaseAuthException -> it.toAventuraException()
-                else -> UnknownException()
+                else -> UnknownException(it)
             }
         }
     }
@@ -38,7 +38,7 @@ class FirebaseUserApi @Inject constructor() : UserApi {
         }.onFailure {
             throw when (it) {
                 is FirebaseAuthException -> it.toAventuraException()
-                else -> UnknownException()
+                else -> UnknownException(it)
             }
         }
     }
@@ -50,7 +50,7 @@ class FirebaseUserApi @Inject constructor() : UserApi {
         }.onFailure {
             throw when (it) {
                 is FirebaseAuthException -> it.toAventuraException()
-                else -> UnknownException()
+                else -> UnknownException(it)
             }
         }
     }
@@ -67,7 +67,7 @@ class FirebaseUserApi @Inject constructor() : UserApi {
                 )
                 ?.await()
         }.onFailure {
-            throw UnknownException()
+            throw UnknownException(it)
         }
     }
 }

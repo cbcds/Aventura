@@ -1,6 +1,7 @@
 package com.cbcds.aventura.feature.auth.onboarding
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,31 +12,33 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.cbcds.aventura.core.model.AppFeature
-import com.cbcds.aventura.core.ui.component.base.RadioButton
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-@OptIn(ExperimentalPagerApi::class)
-fun OnboardingPager(items: List<AppFeature>, modifier: Modifier = Modifier) {
+internal fun OnboardingPager(items: List<AppFeature>, modifier: Modifier = Modifier) {
     val pagerState = rememberPagerState()
 
     Column(modifier = modifier) {
-        HorizontalPager(count = items.size, state = pagerState) {
-            OnboardingPagerItem(items[currentPage])
+        HorizontalPager(pageCount = items.size, state = pagerState) { page ->
+            OnboardingPagerItem(items[page])
         }
-        OnboardingPagerIndicator(pagerState, modifier = Modifier.padding(top = 50.dp))
+        OnboardingPagerIndicator(
+            pageCount = items.size,
+            currentPage = pagerState.currentPage,
+            modifier = Modifier.padding(top = 50.dp),
+        )
     }
 }
 
@@ -43,7 +46,7 @@ fun OnboardingPager(items: List<AppFeature>, modifier: Modifier = Modifier) {
 private fun OnboardingPagerItem(item: AppFeature) {
     Column(
         modifier = Modifier.height(350.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
             painter = painterResource(item.imageResId),
@@ -65,40 +68,52 @@ private fun OnboardingPagerItem(item: AppFeature) {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun OnboardingPagerIndicator(pagerState: PagerState, modifier: Modifier = Modifier) {
+private fun OnboardingPagerIndicator(
+    pageCount: Int,
+    currentPage: Int,
+    modifier: Modifier = Modifier,
+) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        val radius = 8.dp.value
-        for (i in 0 until pagerState.pageCount) {
-            val indicatorColor = if (i <= pagerState.currentPage) {
+        for (i in 0 until pageCount) {
+            val indicatorColor = if (i <= currentPage) {
                 MaterialTheme.colorScheme.primary
             } else {
                 MaterialTheme.colorScheme.surfaceVariant
             }
-            val isItemActivated = i == pagerState.currentPage
+            val isItemActivated = i == currentPage
             if (!isItemActivated) {
+                val radius = 8.dp.value
                 Canvas(
                     modifier = Modifier.size(8.dp),
                     onDraw = { drawCircle(indicatorColor, radius = radius) }
                 )
             } else {
-                RadioButton(
-                    selected = true,
-                    onClick = {},
-                    modifier = Modifier.size(18.dp),
+                val innerRadius = 8.dp.value
+                val outerRadius = 18.dp.value
+                Canvas(
+                    modifier = Modifier.size(8.dp),
+                    onDraw = {
+                        drawCircle(
+                            color = indicatorColor,
+                            radius = innerRadius,
+                        )
+                        drawCircle(
+                            color = indicatorColor,
+                            radius = outerRadius,
+                            style = Stroke(width = 4.dp.value),
+                        )
+                    }
                 )
             }
 
-            val isLastItem = i == pagerState.pageCount - 1
-            val isNextItemActivated = i + 1 == pagerState.currentPage
+            val isLastItem = i == pageCount - 1
             if (!isLastItem) {
-                val spacerWidth = if (isItemActivated || isNextItemActivated) 15.dp else 16.dp
-                Spacer(modifier = Modifier.width(spacerWidth))
+                Spacer(modifier = Modifier.width(16.dp))
             }
         }
     }
