@@ -131,7 +131,7 @@ fun TextButton(
     }
 }
 
-
+@Suppress("ForbiddenComment")
 // TODO: uncomment when this component is fully supported
 /*@Composable
 fun FilledIconButton(

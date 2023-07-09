@@ -16,3 +16,14 @@ plugins {
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.secrets) apply false
 }
+
+tasks.register<Detekt>("detektAll") {
+    description = "Runs Detekt on all modules"
+    parallel = true
+    ignoreFailures = false
+    buildUponDefaultConfig = true
+    setSource(projectDir)
+    include("**/*.kt", "**/*.kts")
+    exclude("**/resources/**", "**/build/**")
+    config.setFrom(project.file("detekt.yml"))
+}

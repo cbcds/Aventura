@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
+@Suppress("ForbiddenComment")
 // TODO: change corner radius
 @Composable
 fun Checkbox(

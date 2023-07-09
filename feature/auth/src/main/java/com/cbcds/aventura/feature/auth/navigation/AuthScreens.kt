@@ -26,5 +26,4 @@ object SignUpScreen : Screen {
 object GoogleSsoScreen : Screen {
 
     override val route: String = "googleSso"
-
 }

@@ -16,6 +16,7 @@ class DefaultGoogleSignInClientFacade @Inject constructor(
     private val signInClient: SignInClient,
 ) : GoogleSignInClientFacade {
 
+    @Suppress("TooGenericExceptionCaught", "SwallowedException")
     override suspend fun beginSignIn(serverClientId: String): BeginSignInResult {
         return try {
             signInClient.beginSignIn(createSignInRequest(serverClientId)).await()

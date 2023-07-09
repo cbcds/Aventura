@@ -1,0 +1,12 @@
+naming:
+  FunctionNaming:
+    ignoreAnnotated: ['Composable']
+
+complexity:
+  LongParameterList:
+    functionThreshold: 15
+    ignoreDefaultParameters: true
+
+style:
+  UnusedPrivateMember:
+    ignoreAnnotated: ['Preview']

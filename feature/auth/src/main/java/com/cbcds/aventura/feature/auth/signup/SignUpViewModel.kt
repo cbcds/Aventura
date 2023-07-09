@@ -75,8 +75,10 @@ internal class SignUpViewModel @Inject constructor(
         }
     }
 
+    @Suppress("EmptyFunctionBlock")
     fun authWithFacebook() {}
 
+    @Suppress("EmptyFunctionBlock")
     fun authWithGithub() {}
 
     fun toSignInScreen() {

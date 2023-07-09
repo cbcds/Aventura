@@ -17,10 +17,12 @@ class SsoInteractor @Inject constructor(
         }
     }
 
+    @Suppress("UnusedPrivateMember")
     suspend fun authWithFacebook(token: String): Result<Unit> {
         return Result.success(Unit)
     }
 
+    @Suppress("UnusedPrivateMember")
     suspend fun authWithGitHub(token: String): Result<Unit> {
         return Result.success(Unit)
     }
