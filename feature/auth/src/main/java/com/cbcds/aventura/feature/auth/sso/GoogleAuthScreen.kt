@@ -17,7 +17,7 @@ internal fun GoogleAuthScreen(
     viewModel: GoogleAuthViewModel = hiltViewModel()
 ) {
     val authUiState by viewModel.googleAuthUiState.collectAsStateWithLifecycle()
-    when(val state = authUiState) {
+    when (val state = authUiState) {
         is GoogleAuthUiState.Initial ->
             Unit
         is GoogleAuthUiState.ReadyToShowAuth ->

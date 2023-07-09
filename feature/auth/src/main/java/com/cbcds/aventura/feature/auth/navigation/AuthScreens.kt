@@ -27,3 +27,8 @@ object GoogleSsoScreen : Screen {
 
     override val route: String = "googleSso"
 }
+
+object FacebookSsoScreen : Screen {
+
+    override val route: String = "facebookSso"
+}

@@ -13,4 +13,5 @@ dependencies {
 
     implementation(libs.androidx.compose.foundation)
     implementation(libs.play.services.auth)
+    implementation(libs.facebook.login)
 }
