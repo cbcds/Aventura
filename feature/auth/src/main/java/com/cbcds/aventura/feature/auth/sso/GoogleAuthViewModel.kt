@@ -28,6 +28,15 @@ internal class GoogleAuthViewModel @Inject constructor(
         beginAuth()
     }
 
+    fun auth(signInResultData: Intent?) {
+        val token = googleSignInClientFacade.getToken(signInResultData)
+        navigationController.finishWithResult(Result.success(token))
+    }
+
+    fun finish() {
+        navigationController.finishWithResult(Result.success(null))
+    }
+
     private fun beginAuth() {
         viewModelScope.launch {
             runSuspendCatching {
@@ -38,15 +47,6 @@ internal class GoogleAuthViewModel @Inject constructor(
                 navigationController.finishWithResult(Result.failure<String?>(it))
             }
         }
-    }
-
-    fun auth(signInResultData: Intent?) {
-        val token = googleSignInClientFacade.getToken(signInResultData)
-        navigationController.finishWithResult(Result.success(token))
-    }
-
-    fun finish() {
-        navigationController.finishWithResult(Result.success(null))
     }
 }
 

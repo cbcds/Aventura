@@ -4,6 +4,7 @@ import com.cbcds.aventura.core.common.exception.AuthException
 import com.cbcds.aventura.core.common.exception.EmailAlreadyInUseException
 import com.cbcds.aventura.core.common.exception.InvalidPasswordException
 import com.cbcds.aventura.core.common.exception.UnknownException
+import com.cbcds.aventura.core.common.exception.AccountExistsWithDifferentProvider
 import com.cbcds.aventura.core.common.exception.UserDisabledException
 import com.cbcds.aventura.core.common.exception.UserNotFoundException
 import com.google.firebase.auth.FirebaseAuthException
@@ -23,6 +24,7 @@ fun FirebaseAuthException.toAventuraException(): Exception {
 private fun FirebaseAuthUserCollisionException.toAventuraException(): Exception {
     return when (this.errorCode) {
         "ERROR_EMAIL_ALREADY_IN_USE" -> EmailAlreadyInUseException
+        "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" -> AccountExistsWithDifferentProvider
         else -> UnknownException(this)
     }
 }

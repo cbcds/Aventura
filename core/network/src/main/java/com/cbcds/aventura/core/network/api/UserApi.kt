@@ -10,6 +10,8 @@ interface UserApi {
 
     suspend fun authWithFacebook(token: String)
 
+    suspend fun authWithGithub(token: String)
+
     suspend fun signOut()
 
     suspend fun updateUsername(username: String)

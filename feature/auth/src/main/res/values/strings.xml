@@ -22,6 +22,7 @@
     <string name="user_not_found_error">User not found</string>
     <string name="incorrect_password_error">Incorrect password</string>
     <string name="no_matching_credentials_error">No logged in users found</string>
+    <string name="account_exists_with_different_provider_error">Account already exists with different provider</string>
 
     <string name="password_text_field_title">Password</string>
     <string name="empty_password_error">Please enter a password</string>

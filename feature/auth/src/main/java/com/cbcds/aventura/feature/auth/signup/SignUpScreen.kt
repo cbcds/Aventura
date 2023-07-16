@@ -1,6 +1,5 @@
 package com.cbcds.aventura.feature.auth.signup
 
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
