@@ -8,6 +8,7 @@ import com.cbcds.aventura.feature.auth.onboarding.OnboardingScreen
 import com.cbcds.aventura.feature.auth.signin.SignInScreen
 import com.cbcds.aventura.feature.auth.signup.SignUpScreen
 import com.cbcds.aventura.feature.auth.sso.FacebookAuthScreen
+import com.cbcds.aventura.feature.auth.sso.GithubAuthScreen
 import com.cbcds.aventura.feature.auth.sso.GoogleAuthScreen
 
 fun NavGraphBuilder.authGraph() {
@@ -29,6 +30,9 @@ fun NavGraphBuilder.authGraph() {
         }
         dialog(route = FacebookSsoScreen.route) {
             FacebookAuthScreen()
+        }
+        dialog(route = GithubSsoScreen.route) {
+            GithubAuthScreen()
         }
     }
 }

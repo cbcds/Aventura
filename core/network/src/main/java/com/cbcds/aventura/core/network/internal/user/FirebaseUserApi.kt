@@ -8,6 +8,7 @@ import com.cbcds.aventura.core.network.firebase.FirebaseEmulator
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuthException
+import com.google.firebase.auth.GithubAuthProvider
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
@@ -54,6 +55,12 @@ class FirebaseUserApi @Inject constructor() : UserApi {
     override suspend fun authWithFacebook(token: String) {
         authWithSso {
             FacebookAuthProvider.getCredential(token)
+        }
+    }
+
+    override suspend fun authWithGithub(token: String) {
+        authWithSso {
+            GithubAuthProvider.getCredential(token)
         }
     }
 

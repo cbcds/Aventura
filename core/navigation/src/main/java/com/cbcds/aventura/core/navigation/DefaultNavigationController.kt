@@ -24,7 +24,10 @@ class DefaultNavigationController @Inject constructor() : NavigationController {
     }
 
     override fun navigateForResult(screen: Screen): Flow<Result<*>> {
-        val resultFlow = MutableSharedFlow<Result<*>>(extraBufferCapacity = 1)
+        val resultFlow = MutableSharedFlow<Result<*>>(
+            extraBufferCapacity = 1,
+            onBufferOverflow = BufferOverflow.DROP_LATEST,
+        )
         _commands.tryEmit(NavigationCommand.NavigateForResult(screen, resultFlow))
         return resultFlow
     }

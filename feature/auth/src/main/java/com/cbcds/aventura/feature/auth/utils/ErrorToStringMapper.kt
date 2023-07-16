@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import com.cbcds.aventura.core.common.exception.EmailAlreadyInUseException
 import com.cbcds.aventura.core.common.exception.InvalidPasswordException
 import com.cbcds.aventura.core.common.exception.NoMatchingCredentialsException
+import com.cbcds.aventura.core.common.exception.AccountExistsWithDifferentProvider
 import com.cbcds.aventura.core.common.exception.UserNotFoundException
 import com.cbcds.aventura.core.domain.model.EmailValidationError
 import com.cbcds.aventura.core.domain.model.PasswordValidationError
@@ -44,6 +45,7 @@ internal fun Throwable.toErrorStringId(): Int {
         is UserNotFoundException -> R.string.user_not_found_error
         is InvalidPasswordException -> R.string.incorrect_password_error
         is NoMatchingCredentialsException -> R.string.no_matching_credentials_error
+        is AccountExistsWithDifferentProvider -> R.string.account_exists_with_different_provider_error
         else -> coreR.string.unknown_error
     }
 }

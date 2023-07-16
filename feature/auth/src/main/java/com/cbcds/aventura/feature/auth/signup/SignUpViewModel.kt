@@ -13,6 +13,7 @@ import com.cbcds.aventura.core.domain.model.UsernameValidationError
 import com.cbcds.aventura.core.navigation.NavigationController
 import com.cbcds.aventura.core.navigation.Screen
 import com.cbcds.aventura.feature.auth.navigation.FacebookSsoScreen
+import com.cbcds.aventura.feature.auth.navigation.GithubSsoScreen
 import com.cbcds.aventura.feature.auth.navigation.GoogleSsoScreen
 import com.cbcds.aventura.feature.auth.navigation.SignInScreen
 import com.cbcds.aventura.feature.auth.signup.SignUpUiState.ValidationErrors
@@ -74,8 +75,12 @@ internal class SignUpViewModel @Inject constructor(
         )
     }
 
-    @Suppress("EmptyFunctionBlock")
-    fun authWithGithub() {}
+    fun authWithGithub() {
+        authWithSso(
+            ssoScreen = GithubSsoScreen,
+            authWithToken = ssoInteractor::authWithGithub,
+        )
+    }
 
     fun toSignInScreen() {
         navigationController.navigateAndClearStack(SignInScreen)

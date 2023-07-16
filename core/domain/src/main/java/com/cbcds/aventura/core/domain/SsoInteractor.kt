@@ -20,9 +20,10 @@ class SsoInteractor @Inject constructor(
         }
     }
 
-    @Suppress("UnusedPrivateMember")
-    suspend fun authWithGitHub(token: String): Result<Unit> {
-        return Result.success(Unit)
+    suspend fun authWithGithub(token: String): Result<Unit> {
+        return authWithSso {
+            userRepository.authWithGithub(token)
+        }
     }
 
     private suspend fun authWithSso(auth: suspend () -> Unit): Result<Unit> {

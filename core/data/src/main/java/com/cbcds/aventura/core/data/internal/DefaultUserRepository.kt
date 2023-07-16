@@ -24,6 +24,10 @@ class DefaultUserRepository @Inject constructor(
         userApi.authWithFacebook(token)
     }
 
+    override suspend fun authWithGithub(token: String) {
+        userApi.authWithGithub(token)
+    }
+
     override suspend fun signOut() {
         userApi.signOut()
     }

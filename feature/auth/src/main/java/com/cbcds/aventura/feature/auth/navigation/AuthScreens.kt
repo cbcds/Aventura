@@ -32,3 +32,8 @@ object FacebookSsoScreen : Screen {
 
     override val route: String = "facebookSso"
 }
+
+object GithubSsoScreen : Screen {
+
+    override val route: String = "githubSso"
+}

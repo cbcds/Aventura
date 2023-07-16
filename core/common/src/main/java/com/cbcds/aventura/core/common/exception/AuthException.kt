@@ -10,4 +10,6 @@ object UserNotFoundException : AuthException()
 
 object InvalidPasswordException : AuthException()
 
+object AccountExistsWithDifferentProvider : AuthException()
+
 object NoMatchingCredentialsException : AuthException()
