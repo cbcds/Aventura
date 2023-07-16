@@ -3,8 +3,10 @@ package com.cbcds.aventura.core.network.internal.user
 import com.cbcds.aventura.core.common.exception.UnknownException
 import com.cbcds.aventura.core.common.utils.runSuspendCatching
 import com.cbcds.aventura.core.network.BuildConfig
-import com.cbcds.aventura.core.network.firebase.FirebaseEmulator
 import com.cbcds.aventura.core.network.api.UserApi
+import com.cbcds.aventura.core.network.firebase.FirebaseEmulator
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -43,15 +45,15 @@ class FirebaseUserApi @Inject constructor() : UserApi {
         }
     }
 
-    override suspend fun authWithGoogle(token: String?) {
-        runSuspendCatching {
-            val firebaseCredential = GoogleAuthProvider.getCredential(token, null)
-            Firebase.auth.signInWithCredential(firebaseCredential).await()
-        }.onFailure {
-            throw when (it) {
-                is FirebaseAuthException -> it.toAventuraException()
-                else -> UnknownException(it)
-            }
+    override suspend fun authWithGoogle(token: String) {
+        authWithSso {
+            GoogleAuthProvider.getCredential(token, null)
+        }
+    }
+
+    override suspend fun authWithFacebook(token: String) {
+        authWithSso {
+            FacebookAuthProvider.getCredential(token)
         }
     }
 
@@ -68,6 +70,17 @@ class FirebaseUserApi @Inject constructor() : UserApi {
                 ?.await()
         }.onFailure {
             throw UnknownException(it)
+        }
+    }
+
+    private suspend fun authWithSso(getCredential: () -> AuthCredential) {
+        runSuspendCatching {
+            Firebase.auth.signInWithCredential(getCredential()).await()
+        }.onFailure {
+            throw when (it) {
+                is FirebaseAuthException -> it.toAventuraException()
+                else -> UnknownException(it)
+            }
         }
     }
 }

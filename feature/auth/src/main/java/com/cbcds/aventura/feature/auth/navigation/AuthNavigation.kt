@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 import com.cbcds.aventura.feature.auth.onboarding.OnboardingScreen
 import com.cbcds.aventura.feature.auth.signin.SignInScreen
 import com.cbcds.aventura.feature.auth.signup.SignUpScreen
+import com.cbcds.aventura.feature.auth.sso.FacebookAuthScreen
 import com.cbcds.aventura.feature.auth.sso.GoogleAuthScreen
 
 fun NavGraphBuilder.authGraph() {
@@ -25,6 +26,9 @@ fun NavGraphBuilder.authGraph() {
         }
         dialog(route = GoogleSsoScreen.route) {
             GoogleAuthScreen()
+        }
+        dialog(route = FacebookSsoScreen.route) {
+            FacebookAuthScreen()
         }
     }
 }

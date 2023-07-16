@@ -16,8 +16,12 @@ class DefaultUserRepository @Inject constructor(
         userApi.signInWithEmailAndPassword(email, password)
     }
 
-    override suspend fun authWithGoogle(token: String?) {
+    override suspend fun authWithGoogle(token: String) {
         userApi.authWithGoogle(token)
+    }
+
+    override suspend fun authWithFacebook(token: String) {
+        userApi.authWithFacebook(token)
     }
 
     override suspend fun signOut() {

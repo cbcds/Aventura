@@ -6,7 +6,9 @@ interface UserRepository {
 
     suspend fun signInWithEmailAndPassword(email: String, password: String)
 
-    suspend fun authWithGoogle(token: String?)
+    suspend fun authWithGoogle(token: String)
+
+    suspend fun authWithFacebook(token: String)
 
     suspend fun signOut()
 

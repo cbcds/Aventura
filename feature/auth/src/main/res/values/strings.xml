@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="facebook_app_id">871035874342695</string>
+
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
 

@@ -10,6 +10,8 @@ import com.cbcds.aventura.core.domain.model.EmailValidationError
 import com.cbcds.aventura.core.domain.model.PasswordValidationError
 import com.cbcds.aventura.core.domain.model.SignInDataValidationResult
 import com.cbcds.aventura.core.navigation.NavigationController
+import com.cbcds.aventura.core.navigation.Screen
+import com.cbcds.aventura.feature.auth.navigation.FacebookSsoScreen
 import com.cbcds.aventura.feature.auth.navigation.GoogleSsoScreen
 import com.cbcds.aventura.feature.auth.navigation.SignUpScreen
 import com.cbcds.aventura.feature.auth.signin.SignInUiState.ValidationErrors
@@ -56,24 +58,18 @@ internal class SignInViewModel @Inject constructor(
     }
 
     fun authWithGoogle() {
-        val resultFlow = navigationController.navigateForResult(GoogleSsoScreen)
-        signInJob = viewModelScope.launch {
-            resultFlow.collect {
-                it.onSuccess { result ->
-                    val token = result as? String
-                    token?.let {
-                        toSsoLoadingState()
-                        _signInUiState.value = ssoInteractor.authWithGoogle(token).toSignInUiState()
-                    }
-                }.onFailure { error ->
-                    toSsoErrorState(error)
-                }
-            }
-        }
+        authWithSso(
+            ssoScreen = GoogleSsoScreen,
+            authWithToken = ssoInteractor::authWithGoogle,
+        )
     }
 
-    @Suppress("EmptyFunctionBlock")
-    fun authWithFacebook() {}
+    fun authWithFacebook() {
+        authWithSso(
+            ssoScreen = FacebookSsoScreen,
+            authWithToken = ssoInteractor::authWithFacebook,
+        )
+    }
 
     @Suppress("EmptyFunctionBlock")
     fun authWithGithub() {}
@@ -90,12 +86,23 @@ internal class SignInViewModel @Inject constructor(
         }
     }
 
-    private fun toSsoLoadingState() {
-        _signInUiState.value = _signInUiState.value.copy(showLoading = true, authError = null)
-    }
-
-    private fun toSsoErrorState(authError: Throwable) {
-        _signInUiState.value =_signInUiState.value.copy(showLoading = false, authError = authError)
+    private fun authWithSso(ssoScreen: Screen, authWithToken: suspend (String) -> Result<Unit>) {
+        val resultFlow = navigationController.navigateForResult(ssoScreen)
+        signInJob = viewModelScope.launch {
+            resultFlow.collect {
+                it.onSuccess { result ->
+                    val token = result as? String
+                    token?.let {
+                        _signInUiState.value = _signInUiState.value
+                            .copy(showLoading = true, authError = null)
+                        _signInUiState.value = authWithToken(token).toSignInUiState()
+                    }
+                }.onFailure { error ->
+                    _signInUiState.value =_signInUiState.value
+                        .copy(showLoading = false, authError = error)
+                }
+            }
+        }
     }
 
     private fun Result<Unit>.toSignInUiState(): SignInUiState {
