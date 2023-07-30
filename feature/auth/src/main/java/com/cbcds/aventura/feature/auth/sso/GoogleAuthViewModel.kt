@@ -29,12 +29,20 @@ internal class GoogleAuthViewModel @Inject constructor(
     }
 
     fun auth(signInResultData: Intent?) {
-        val token = googleSignInClientFacade.getToken(signInResultData)
-        navigationController.finishWithResult(Result.success(token))
+        runCatching {
+            val token = googleSignInClientFacade.getToken(signInResultData)
+            navigationController.finishWithResult(Result.success(token))
+        }.onFailure {
+            finishWithError(it)
+        }
     }
 
-    fun finish() {
+    fun cancel() {
         navigationController.finishWithResult(Result.success(null))
+    }
+
+    private fun finishWithError(exception: Throwable) {
+        navigationController.finishWithResult(Result.failure<String?>(exception))
     }
 
     private fun beginAuth() {
@@ -44,7 +52,7 @@ internal class GoogleAuthViewModel @Inject constructor(
             }.onSuccess {
                 _googleAuthUiState.value = GoogleAuthUiState.ReadyToShowAuth(it)
             }.onFailure {
-                navigationController.finishWithResult(Result.failure<String?>(it))
+                finishWithError(it)
             }
         }
     }

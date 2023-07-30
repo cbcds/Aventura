@@ -24,8 +24,7 @@ internal fun GoogleAuthScreen(
             OneTapScreen(
                 beginSignInResult = state.beginSignInResult,
                 onAuthSuccess = viewModel::auth,
-                onAuthFailure = viewModel::finish,
-                onAuthCancel = viewModel::finish,
+                onAuthCancel = viewModel::cancel,
             )
     }
 }
@@ -34,7 +33,6 @@ internal fun GoogleAuthScreen(
 private fun OneTapScreen(
     beginSignInResult: BeginSignInResult,
     onAuthSuccess: (Intent?) -> Unit,
-    onAuthFailure: () -> Unit,
     onAuthCancel: () -> Unit,
 ) {
     val launcher = rememberLauncherForActivityResult(

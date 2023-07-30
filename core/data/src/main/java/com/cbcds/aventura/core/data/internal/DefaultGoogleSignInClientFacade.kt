@@ -30,7 +30,11 @@ class DefaultGoogleSignInClientFacade @Inject constructor(
     }
 
     override fun getToken(signInResultData: Intent?): String? {
-        return signInClient.getSignInCredentialFromIntent(signInResultData).googleIdToken
+        return runCatching {
+            signInClient.getSignInCredentialFromIntent(signInResultData).googleIdToken
+        }.onFailure {
+            throw it.toAventuraException()
+        }.getOrNull()
     }
 
     private fun createSignInRequest(serverClientId: String): BeginSignInRequest {
@@ -59,7 +63,7 @@ class DefaultGoogleSignInClientFacade @Inject constructor(
             .build()
     }
 
-    private fun Exception.toAventuraException(): Exception {
+    private fun Throwable.toAventuraException(): Exception {
         return if (this is ApiException && statusCode == CommonStatusCodes.CANCELED) {
             NoMatchingCredentialsException
         } else {
